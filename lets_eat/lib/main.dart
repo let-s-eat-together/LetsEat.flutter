@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'plan/plan_screen.dart';
+import 'friend/friend_list_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,9 +34,8 @@ class _MainUI extends State<MainUI> {
     PlanScreen(),
 
     // Friends
-    Text(
-      'Friends',
-      style: TextStyle(fontSize: 30),),
+    FriendListScreen(),
+
     // Add
     Text('Add',
       style: TextStyle(fontSize: 30),),
