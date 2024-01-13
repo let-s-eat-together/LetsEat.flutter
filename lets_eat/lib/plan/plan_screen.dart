@@ -11,32 +11,36 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Text("Plan"),
-          Expanded(
-            child: planList.isEmpty
-                ? Center(
-                    child: Text(
-                      'No Data',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Text('Plan'),
+            Expanded(
+              child: planList.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No Data',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: 11,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            child: Icon(Icons.person),
+                          ),
+                          title: Text(index.toString()),
+                          subtitle: Text("53days left."),
+                          trailing: StingButton(
+                              otherUserName: index.toString(), planId: 1),
+                        );
+                      },
                     ),
-                  )
-                : ListView.builder(
-                    itemCount: 11,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          child: Icon(Icons.person),
-                        ),
-                        title: Text(index.toString()),
-                        subtitle: Text("53days left."),
-                        trailing: StingButton(otherUserName: "test", planId: 1),
-                      );
-                    },
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

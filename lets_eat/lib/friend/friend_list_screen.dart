@@ -16,7 +16,8 @@ class _FriendListScreenState extends State<FriendListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: SafeArea(
+      child: Column(
         children: <Widget>[
           Text("Friend"),
           SearchTextField(
@@ -36,13 +37,13 @@ class _FriendListScreenState extends State<FriendListScreen> {
                     child: Icon(Icons.person),
                   ),
                   title: Text(name),
-                  subtitle: Text("username"),
                   // trailing: StingButton(otherUserName: "test", planId: 1),
                 );
               },
             ),
           ),
         ],
+      ),
       ),
     );
   }

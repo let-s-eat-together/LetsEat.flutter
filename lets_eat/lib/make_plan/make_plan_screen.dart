@@ -13,7 +13,8 @@ class _MakePlanViewState extends State<MakePlanView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("만들기")),
-      body: ListView(
+      body: SafeArea (
+        child: ListView(
         children: <Widget>[
           ListTile(
             title: Text("날짜를 선택해주세요"),
@@ -50,6 +51,7 @@ class _MakePlanViewState extends State<MakePlanView> {
           ),
         ],
       ),
+      )
     );
   }
 }
