@@ -37,6 +37,7 @@ class Login extends StatelessWidget {
               textColor: Colors.white,
               pressedTextColor: Colors.black,
               text: '로그인',
+              onPressed: (){},
             ),
             _BuildButton(
               width: 300.0,
@@ -44,11 +45,21 @@ class Login extends StatelessWidget {
               textColor: Colors.white,
               pressedTextColor: Colors.black,
               text: '회원가입',
+              onPressed: () async {
+                final result = await Navigator.of(context).pushNamed(
+                  '/signup',
+                );
+                print(result);
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  login() {
+
   }
 }
 
@@ -89,6 +100,7 @@ class _BuildButton extends StatelessWidget {
   final Color textColor;
   final Color pressedTextColor;
   final String text;
+  final VoidCallback onPressed;
 
   const _BuildButton({
     required this.width,
@@ -96,6 +108,7 @@ class _BuildButton extends StatelessWidget {
     required this.textColor,
     required this.pressedTextColor,
     required this.text,
+    required this.onPressed,
     super.key,
   });
 
@@ -104,7 +117,7 @@ class _BuildButton extends StatelessWidget {
     return Container(
       width: width,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
             backgroundColor,
