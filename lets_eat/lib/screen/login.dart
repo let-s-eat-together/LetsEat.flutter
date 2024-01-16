@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +42,7 @@ class Login extends StatelessWidget {
               textColor: Colors.white,
               pressedTextColor: Colors.black,
               text: '로그인',
-              onPressed: (){},
+              onPressed: tryLogin,
             ),
             _BuildButton(
               width: 300.0,
@@ -45,11 +50,8 @@ class Login extends StatelessWidget {
               textColor: Colors.white,
               pressedTextColor: Colors.black,
               text: '회원가입',
-              onPressed: () async {
-                final result = await Navigator.of(context).pushNamed(
-                  '/signup',
-                );
-                print(result);
+              onPressed: () {
+                Navigator.of(context).pushNamed('/signup');
               },
             ),
           ],
@@ -58,8 +60,17 @@ class Login extends StatelessWidget {
     );
   }
 
-  login() {
-
+  void tryLogin() {
+    bool isLoginSuccess = true;
+    print('로그인 api 진행');
+    if(isLoginSuccess) {
+      print('로그인 성공');
+      Navigator.of(context).pushNamed(
+        '/planlist'
+      );
+    } else {
+      print('로그인 실패');
+    }
   }
 }
 
