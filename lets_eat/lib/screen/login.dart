@@ -90,6 +90,7 @@ class _LoginState extends State<Login> {
         Navigator.of(context).pushNamed('/planlist');
       } else {
         print('로그인 실패');
+        // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
         print('잠시후 다시 시도해 주세요');
       }
     } else {
@@ -142,7 +143,7 @@ class _Password extends StatelessWidget {
   }
 }
 
-class _BuildTextField extends StatelessWidget {
+class _BuildTextField extends StatefulWidget {
   final Icon icon;
   final String hintText;
   final bool isPW;
@@ -157,30 +158,53 @@ class _BuildTextField extends StatelessWidget {
   });
 
   @override
+  State<_BuildTextField> createState() => _BuildTextFieldState();
+}
+
+class _BuildTextFieldState extends State<_BuildTextField> {
+  bool pwVisible = false;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: TextFormField(
-        onSaved: onSaved,
+        onSaved: widget.onSaved,
         validator: (String? val) {
           if (val == null || val.isEmpty) {
             return '값을 입력해주세요';
           }
+          if (widget.isPW) {
+            // pw 포맷
+          } else {
+            // email 포멧
+          }
           return null;
         },
-        inputFormatters: isPW ? [] : [],
-        expands: false,
-        obscureText: isPW,
+        obscureText: widget.isPW ? !pwVisible : false,
+        cursorColor: Colors.black,
         decoration: InputDecoration(
-
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderRadius: BorderRadius.all(Radius.circular(25)),
             borderSide: BorderSide.none,
           ),
-
-          prefixIcon: icon,
-          hintText: hintText,
+          prefixIcon: widget.icon,
+          hintText: widget.hintText,
           filled: true,
           fillColor: Color(0xffefefef),
+          suffixIcon: widget.isPW
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      pwVisible = !pwVisible;
+                    });
+                  },
+                  icon: Icon(
+                    pwVisible
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                  ),
+                )
+              : null,
         ),
       ),
       width: 300.0,
