@@ -90,10 +90,12 @@ class _LoginState extends State<Login> {
       print('로그인 api 진행');
       if (isLoginSuccess) {
         print('로그인 성공');
+        // token, userNumber, username 넘겨주기
         Navigator.of(context).pushNamed('/planlist');
       } else {
         print('로그인 실패');
         // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
+        print('id or pw가 틀렸습니다');
         print('잠시후 다시 시도해 주세요');
       }
     } else {
