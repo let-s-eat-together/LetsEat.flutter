@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../component/build_button.dart';
+import '../component/build_textfield.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -49,7 +52,7 @@ class _LoginState extends State<Login> {
                     },
                   ),
                   SizedBox(height: 8.0),
-                  _BuildButton(
+                  BuildButton(
                     width: 300.0,
                     backgroundColor: Colors.orange,
                     textColor: Colors.white,
@@ -57,7 +60,7 @@ class _LoginState extends State<Login> {
                     text: '로그인',
                     onPressed: tryLogin,
                   ),
-                  _BuildButton(
+                  BuildButton(
                     width: 300.0,
                     backgroundColor: Colors.orangeAccent,
                     textColor: Colors.white,
@@ -109,7 +112,7 @@ class _Email extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BuildTextField(
+    return BuildTextField(
       hintText: "Email",
       icon: Icon(
         Icons.email_outlined,
@@ -131,7 +134,7 @@ class _Password extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BuildTextField(
+    return BuildTextField(
       hintText: "Password",
       icon: Icon(
         Icons.lock_outline,
@@ -139,119 +142,6 @@ class _Password extends StatelessWidget {
       ),
       isPW: true,
       onSaved: onSaved,
-    );
-  }
-}
-
-class _BuildTextField extends StatefulWidget {
-  final Icon icon;
-  final String hintText;
-  final bool isPW;
-  final FormFieldSetter<String> onSaved;
-
-  const _BuildTextField({
-    required this.icon,
-    required this.hintText,
-    required this.isPW,
-    required this.onSaved,
-    super.key,
-  });
-
-  @override
-  State<_BuildTextField> createState() => _BuildTextFieldState();
-}
-
-class _BuildTextFieldState extends State<_BuildTextField> {
-  bool pwVisible = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: TextFormField(
-        onSaved: widget.onSaved,
-        validator: (String? val) {
-          if (val == null || val.isEmpty) {
-            return '값을 입력해주세요';
-          }
-          if (widget.isPW) {
-            // pw 포맷
-          } else {
-            // email 포멧
-          }
-          return null;
-        },
-        obscureText: widget.isPW ? !pwVisible : false,
-        cursorColor: Colors.black,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-            borderSide: BorderSide.none,
-          ),
-          prefixIcon: widget.icon,
-          hintText: widget.hintText,
-          filled: true,
-          fillColor: Color(0xffefefef),
-          suffixIcon: widget.isPW
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      pwVisible = !pwVisible;
-                    });
-                  },
-                  icon: Icon(
-                    pwVisible
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                  ),
-                )
-              : null,
-        ),
-      ),
-      width: 300.0,
-    );
-  }
-}
-
-class _BuildButton extends StatelessWidget {
-  final double width;
-  final Color backgroundColor;
-  final Color textColor;
-  final Color pressedTextColor;
-  final String text;
-  final VoidCallback onPressed;
-
-  const _BuildButton({
-    required this.width,
-    required this.backgroundColor,
-    required this.textColor,
-    required this.pressedTextColor,
-    required this.text,
-    required this.onPressed,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            backgroundColor,
-          ),
-          foregroundColor:
-              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-            if (states.contains(MaterialState.pressed)) {
-              return pressedTextColor;
-            }
-            return textColor;
-          }),
-        ),
-        child: Text(
-          text,
-        ),
-      ),
     );
   }
 }
