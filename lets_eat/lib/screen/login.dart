@@ -31,47 +31,19 @@ class Login extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8.0),
-            Container(
+            _BuildButton(
               width: 300.0,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Colors.orange,
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return Colors.black;
-                    }
-                    return Colors.white;
-                  }),
-                ),
-                child: Text(
-                  '로그인',
-                ),
-              ),
+              backgroundColor: Colors.orange,
+              textColor: Colors.white,
+              pressedTextColor: Colors.black,
+              text: '로그인',
             ),
-            Container(
+            _BuildButton(
               width: 300.0,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Colors.orangeAccent,
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return Colors.black;
-                    }
-                    return Colors.white;
-                  }),
-                ),
-                child: Text(
-                  '회원가입',
-                ),
-              ),
+              backgroundColor: Colors.orangeAccent,
+              textColor: Colors.white,
+              pressedTextColor: Colors.black,
+              text: '회원가입',
             ),
           ],
         ),
@@ -107,6 +79,48 @@ class _BuildTextField extends StatelessWidget {
         ),
       ),
       width: 300.0,
+    );
+  }
+}
+
+class _BuildButton extends StatelessWidget {
+  final double width;
+  final Color backgroundColor;
+  final Color textColor;
+  final Color pressedTextColor;
+  final String text;
+
+  const _BuildButton({
+    required this.width,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.pressedTextColor,
+    required this.text,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            backgroundColor,
+          ),
+          foregroundColor:
+              MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed)) {
+              return pressedTextColor;
+            }
+            return textColor;
+          }),
+        ),
+        child: Text(
+          text,
+        ),
+      ),
     );
   }
 }
