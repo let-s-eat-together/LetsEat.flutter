@@ -28,12 +28,15 @@ class _BuildTextFieldState extends State<BuildTextField> {
         onSaved: widget.onSaved,
         validator: (String? val) {
           if (val == null || val.isEmpty) {
-            return '값을 입력해주세요';
+            return '값을 입력해주세요.';
           }
-          if (widget.isPW) {
-            // pw 포맷
-          } else {
+          if (!widget.isPW) {
             // email 포멧
+            if (!RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+")
+                .hasMatch(val)) {
+              return '유효하지 않은 이메일입니다.';
+            }
           }
           return null;
         },
@@ -50,17 +53,17 @@ class _BuildTextFieldState extends State<BuildTextField> {
           fillColor: Color(0xffefefef),
           suffixIcon: widget.isPW
               ? IconButton(
-            onPressed: () {
-              setState(() {
-                pwVisible = !pwVisible;
-              });
-            },
-            icon: Icon(
-              pwVisible
-                  ? Icons.visibility_off_outlined
-                  : Icons.visibility_outlined,
-            ),
-          )
+                  onPressed: () {
+                    setState(() {
+                      pwVisible = !pwVisible;
+                    });
+                  },
+                  icon: Icon(
+                    pwVisible
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                  ),
+                )
               : null,
         ),
       ),
