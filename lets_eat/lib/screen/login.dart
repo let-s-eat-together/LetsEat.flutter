@@ -168,16 +168,20 @@ class _BuildTextField extends StatelessWidget {
           return null;
         },
         inputFormatters: isPW ? [] : [],
+        expands: false,
         obscureText: isPW,
         decoration: InputDecoration(
-          border: InputBorder.none,
+
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderSide: BorderSide.none,
+          ),
+
           prefixIcon: icon,
           hintText: hintText,
+          filled: true,
+          fillColor: Color(0xffefefef),
         ),
-      ),
-      decoration: BoxDecoration(
-        color: Color(0xffefefef),
-        borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       width: 300.0,
     );
