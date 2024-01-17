@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lets_eat/screen/home/home_screen.dart';
 
 import 'package:lets_eat/screen/login/login.dart';
 import 'package:lets_eat/screen/login/signup.dart';
-import 'package:lets_eat/screen/login/test_planlist_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Login(),
         '/signup' : (context) => Signup(),
-        '/planlist' : (context) => Test_Planlist_Screen(), // Planlist_Screen으로 교체
+        '/home' : (context) => HomeUI(),
       },
     );
   }

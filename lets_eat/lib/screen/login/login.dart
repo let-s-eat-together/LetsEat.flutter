@@ -91,7 +91,7 @@ class _LoginState extends State<Login> {
       if (isLoginSuccess) {
         print('로그인 성공');
         // token, userNumber, username 넘겨주기
-        Navigator.of(context).pushNamed('/planlist');
+        Navigator.of(context).pushNamed('/home');
       } else {
         print('로그인 실패');
         // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
