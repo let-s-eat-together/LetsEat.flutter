@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../component/build_button.dart';
-import '../component/build_textfield.dart';
+import '../../component/build_button.dart';
+import '../../component/build_textfield.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

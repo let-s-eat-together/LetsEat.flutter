@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lets_eat/screen/login.dart';
-import 'package:lets_eat/screen/signup.dart';
-import 'package:lets_eat/screen/test_planlist_screen.dart';
+import 'package:lets_eat/screen/login/login.dart';
+import 'package:lets_eat/screen/login/signup.dart';
+import 'package:lets_eat/screen/login/test_planlist_screen.dart';
 
 void main() {
   runApp(MyApp());
