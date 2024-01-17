@@ -35,10 +35,24 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 로고 or 인사말 넣기
                   SizedBox(
+                    height: 150.0,
+                  ),
+                  Container(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '밥 한번 같이\n먹어볼까요? :)',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
                     width: 300.0,
-                    height: 300.0,
+                  ),
+                  SizedBox(
+                    height: 80.0,
                   ),
                   _Email(
                     onSaved: (String? val) {

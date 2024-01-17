@@ -38,21 +38,22 @@ class _SignupState extends State<Signup> {
                   SizedBox(
                     height: 150.0,
                   ),
-                  Container(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '밥 한번 같이\n먹어볼까요? :)',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                  Text(
+                    'Hey, there',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                     ),
-                    width: 300.0,
+                  ),
+                  Text(
+                    'Create an Account',
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   SizedBox(
-                    height: 80.0,
+                    height: 50.0,
                   ),
                   _Email(
                     onSaved: (String? val) {
