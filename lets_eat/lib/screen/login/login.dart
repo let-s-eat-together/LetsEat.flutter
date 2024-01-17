@@ -120,7 +120,7 @@ class _Email extends StatelessWidget {
         Icons.email_outlined,
         color: Color(0xff7e7d7d),
       ),
-      isPW: false,
+      textType: 0,
       onSaved: onSaved,
     );
   }
@@ -142,7 +142,7 @@ class _Password extends StatelessWidget {
         Icons.lock_outline,
         color: Color(0xff7e7d7d),
       ),
-      isPW: true,
+      textType: 1,
       onSaved: onSaved,
     );
   }
