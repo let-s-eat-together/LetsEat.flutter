@@ -24,6 +24,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -32,13 +35,15 @@ class _LoginState extends State<Login> {
         body: SingleChildScrollView(
           child: Container(
             width: double.infinity,
+            height: height,
             child: Form(
               key: formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 150.0,
+                    height: 50.0,
                   ),
                   Container(
                     child: Align(
@@ -53,41 +58,46 @@ class _LoginState extends State<Login> {
                     ),
                     width: 300.0,
                   ),
-                  SizedBox(
-                    height: 80.0,
+                  Column(
+                    children: [
+                      _Email(
+                        onSaved: (String? val) {
+                          email = val;
+                        },
+                        nextFocusNode: focusNode,
+                      ),
+                      SizedBox(height: 16.0),
+                      _Password(
+                        onSaved: (String? val) {
+                          password = val;
+                        },
+                        focusNode: focusNode,
+                      ),
+                    ],
                   ),
-                  _Email(
-                    onSaved: (String? val) {
-                      email = val;
-                    },
-                    nextFocusNode: focusNode,
+                  Column(
+                    children: [
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Colors.orange,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '로그인',
+                        onPressed: tryLogin,
+                      ),
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Colors.orangeAccent,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '회원가입',
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/signup');
+                        },
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 8.0),
-                  _Password(
-                    onSaved: (String? val) {
-                      password = val;
-                    },
-                    focusNode: focusNode,
-                  ),
-                  SizedBox(height: 8.0),
-                  BuildButton(
-                    width: 300.0,
-                    backgroundColor: Colors.orange,
-                    textColor: Colors.white,
-                    pressedTextColor: Colors.black,
-                    text: '로그인',
-                    onPressed: tryLogin,
-                  ),
-                  BuildButton(
-                    width: 300.0,
-                    backgroundColor: Colors.orangeAccent,
-                    textColor: Colors.white,
-                    pressedTextColor: Colors.black,
-                    text: '회원가입',
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/signup');
-                    },
-                  ),
+                  SizedBox(height: bottomInset),
                 ],
               ),
             ),

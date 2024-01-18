@@ -24,6 +24,9 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -32,53 +35,59 @@ class _SignupState extends State<Signup> {
         body: SingleChildScrollView(
           child: Container(
             width: double.infinity,
+            height: height,
             child: Form(
               key: formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 150.0,
-                  ),
-                  Text(
-                    'Hey, there',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Text(
-                    'Create an Account',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  SizedBox(
                     height: 50.0,
                   ),
-                  _Email(
-                    onSaved: (String? val) {
-                      email = val;
-                    },
-                    nextFocusNode: focusNode1,
+                  Column(
+                    children: [
+                      Text(
+                        'Hey, there',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        'Create an Account',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 8.0),
-                  _Password(
-                    onSaved: (String? val) {
-                      password = val;
-                    },
-                    focusNode: focusNode1,
-                    nextFocusNode: focusNode2,
+                  Column(
+                    children: [
+                      _Email(
+                        onSaved: (String? val) {
+                          email = val;
+                        },
+                        nextFocusNode: focusNode1,
+                      ),
+                      SizedBox(height: 8.0),
+                      _Password(
+                        onSaved: (String? val) {
+                          password = val;
+                        },
+                        focusNode: focusNode1,
+                        nextFocusNode: focusNode2,
+                      ),
+                      SizedBox(height: 8.0),
+                      _Nickname(
+                        onSaved: (String? val) {
+                          nickname = val;
+                        },
+                        focusNode: focusNode2,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 8.0),
-                  _Nickname(
-                    onSaved: (String? val) {
-                      nickname = val;
-                    },
-                    focusNode: focusNode2,
-                  ),
-                  SizedBox(height: 50.0),
                   BuildButton(
                     width: 300.0,
                     backgroundColor: Colors.orange,
@@ -87,6 +96,7 @@ class _SignupState extends State<Signup> {
                     text: '시작하기',
                     onPressed: trySignup,
                   ),
+                  SizedBox(height: bottomInset),
                 ],
               ),
             ),
