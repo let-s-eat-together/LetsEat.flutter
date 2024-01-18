@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lets_eat/screen/login/login.dart';
-
 import '../../component/build_button.dart';
 import '../../component/build_textfield.dart';
 
@@ -17,6 +15,10 @@ class _SignupState extends State<Signup> {
   String? email;
   String? password;
   String? username;
+  String? nickname;
+
+  FocusNode focusNode1 = FocusNode();
+  FocusNode focusNode2 = FocusNode();
 
   int? userNumber;
 
@@ -48,8 +50,8 @@ class _SignupState extends State<Signup> {
                   Text(
                     'Create an Account',
                     style: TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 40,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                   SizedBox(
@@ -59,18 +61,22 @@ class _SignupState extends State<Signup> {
                     onSaved: (String? val) {
                       email = val;
                     },
+                    nextFocusNode: focusNode1,
                   ),
                   SizedBox(height: 8.0),
                   _Password(
                     onSaved: (String? val) {
                       password = val;
                     },
+                    focusNode: focusNode1,
+                    nextFocusNode: focusNode2,
                   ),
                   SizedBox(height: 8.0),
                   _Nickname(
                     onSaved: (String? val) {
-                      password = val;
+                      nickname = val;
                     },
+                    focusNode: focusNode2,
                   ),
                   SizedBox(height: 50.0),
                   BuildButton(
@@ -118,9 +124,11 @@ class _SignupState extends State<Signup> {
 
 class _Email extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
+  final FocusNode nextFocusNode;
 
   const _Email({
     required this.onSaved,
+    required this.nextFocusNode,
     super.key,
   });
 
@@ -134,15 +142,20 @@ class _Email extends StatelessWidget {
       ),
       textType: 0,
       onSaved: onSaved,
+      nextFocusNode: nextFocusNode,
     );
   }
 }
 
 class _Password extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
+  final FocusNode focusNode;
+  final FocusNode nextFocusNode;
 
   const _Password({
     required this.onSaved,
+    required this.focusNode,
+    required this.nextFocusNode,
     super.key,
   });
 
@@ -156,15 +169,19 @@ class _Password extends StatelessWidget {
       ),
       textType: 1,
       onSaved: onSaved,
+      focusNode: focusNode,
+      nextFocusNode: nextFocusNode,
     );
   }
 }
 
 class _Nickname extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
+  final FocusNode focusNode;
 
   const _Nickname({
     required this.onSaved,
+    required this.focusNode,
     super.key,
   });
 
@@ -178,6 +195,7 @@ class _Nickname extends StatelessWidget {
       ),
       textType: 2,
       onSaved: onSaved,
+      focusNode: focusNode,
     );
   }
 }

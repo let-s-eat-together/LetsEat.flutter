@@ -16,6 +16,8 @@ class _LoginState extends State<Login> {
   String? email;
   String? password;
 
+  FocusNode focusNode = FocusNode();
+
   String? token;
   int? userNumber;
   String? username;
@@ -58,12 +60,14 @@ class _LoginState extends State<Login> {
                     onSaved: (String? val) {
                       email = val;
                     },
+                    nextFocusNode: focusNode,
                   ),
                   SizedBox(height: 8.0),
                   _Password(
                     onSaved: (String? val) {
                       password = val;
                     },
+                    focusNode: focusNode,
                   ),
                   SizedBox(height: 8.0),
                   BuildButton(
@@ -120,9 +124,11 @@ class _LoginState extends State<Login> {
 
 class _Email extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
+  final FocusNode nextFocusNode;
 
   const _Email({
     required this.onSaved,
+    required this.nextFocusNode,
     super.key,
   });
 
@@ -136,15 +142,18 @@ class _Email extends StatelessWidget {
       ),
       textType: 0,
       onSaved: onSaved,
+      nextFocusNode: nextFocusNode,
     );
   }
 }
 
 class _Password extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
+  final FocusNode focusNode;
 
   const _Password({
     required this.onSaved,
+    required this.focusNode,
     super.key,
   });
 
@@ -158,6 +167,7 @@ class _Password extends StatelessWidget {
       ),
       textType: 1,
       onSaved: onSaved,
+      focusNode: focusNode,
     );
   }
 }

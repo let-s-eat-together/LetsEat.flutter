@@ -5,12 +5,16 @@ class BuildTextField extends StatefulWidget {
   final String hintText;
   final int textType;
   final FormFieldSetter<String> onSaved;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocusNode;
 
   const BuildTextField({
     required this.icon,
     required this.hintText,
     required this.textType,
     required this.onSaved,
+    this.focusNode,
+    this.nextFocusNode,
     super.key,
   });
 
@@ -53,8 +57,12 @@ class _BuildTextFieldState extends State<BuildTextField> {
           }
           return null;
         },
+        focusNode: widget.focusNode,
+        autofocus: true,
         obscureText: widget.textType == 1 ? !pwVisible : false,
         cursorColor: Colors.black,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(widget.nextFocusNode),
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(25)),
