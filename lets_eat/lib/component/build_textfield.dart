@@ -50,7 +50,7 @@ class _BuildTextFieldState extends State<BuildTextField> {
             if (val.length > 12) {
               return '닉네임이 너무 길어요!';
             }
-            if (!RegExp('')
+            if (!RegExp(r'^[a-zA-Z0-9가-힣]+$')
                 .hasMatch(val)) {
               return '올바르지 않은 닉네임 입니다.';
             }
