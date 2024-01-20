@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../../component/build_button.dart';
 import '../../component/build_textfield.dart';
 
@@ -14,7 +17,6 @@ class _SignupState extends State<Signup> {
 
   String? email;
   String? password;
-  String? username;
   String? nickname;
 
   FocusNode focusNode1 = FocusNode();
@@ -113,21 +115,62 @@ class _SignupState extends State<Signup> {
 
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      bool isSignupSuccess = true;
-      print('회원가입 api 진행');
-      if (isSignupSuccess) {
-        print('회원가입 성공');
-        print('이어서 로그인 api 진행');
-        // email, password로 tryAPI_Login()
-        Navigator.of(context).pushNamed('/home');
-      } else {
-        print('회원가입 실패');
-        // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
-        print('~가 틀렸습니다');
-        print('잠시후 다시 시도해 주세요');
-      }
+      singupAPI();
     } else {
       print('포맷에러');
+    }
+  }
+
+  void singupAPI() async {
+    final url = Uri.parse('');
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'id': email!,
+        'password': password!,
+        'username': nickname!,
+      }),
+    );
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      // email, password로 loginAPI 시도
+      loginAPI();
+    } else {
+      print('회원가입 실패');
+      // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
+      print('~가 틀렸습니다');
+      print('잠시후 다시 시도해 주세요');
+      throw Exception('Failed to load data');
+    }
+  }
+
+  void loginAPI() async {
+    final url = Uri.parse('');
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'id': email!,
+        'password': password!,
+      }),
+    );
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      // token, userNumber, username 넘겨주기
+      Navigator.of(context).pushNamed('/home');
+    } else {
+      print('로그인 실패');
+      // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
+      print('id or pw가 틀렸습니다');
+      print('잠시후 다시 시도해 주세요');
+      throw Exception('Failed to load data');
     }
   }
 }
