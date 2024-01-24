@@ -164,7 +164,14 @@ class _SignupState extends State<Signup> {
       var data = jsonDecode(response.body);
       print(data);
       // token, userNumber, username 넘겨주기
-      Navigator.of(context).pushNamed('/home');
+      Navigator.of(context).pushNamed(
+        '/home',
+        arguments: {
+          'token': data['token'],
+          'userNumber': data['userNumber'],
+          'username': data['username'],
+        },
+      );
     } else {
       print('로그인 실패');
       // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기

@@ -139,7 +139,19 @@ class _LoginState extends State<Login> {
       var data = jsonDecode(response.body);
       print(data);
       // token, userNumber, username 넘겨주기
-      Navigator.of(context).pushNamed('/home');
+      Navigator.of(context).pushNamed(
+        '/home',
+        arguments: {
+          'token': data['token'],
+          'userNumber': data['userNumber'],
+          'username': data['username'],
+        },
+      );
+      // 넘겨받는 화면에서 사용할 때
+      // final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      // final token = arguments['token'];
+      // final userNumber = arguments['userNumber'];
+      // final username = arguments['username'];
     } else {
       print('로그인 실패');
       // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
