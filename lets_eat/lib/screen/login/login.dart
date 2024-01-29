@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../../component/build_button.dart';
 import '../../component/build_textfield.dart';
@@ -16,12 +19,17 @@ class _LoginState extends State<Login> {
   String? email;
   String? password;
 
+  FocusNode focusNode = FocusNode();
+
   String? token;
   int? userNumber;
   String? username;
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -30,46 +38,78 @@ class _LoginState extends State<Login> {
         body: SingleChildScrollView(
           child: Container(
             width: double.infinity,
+            height: height,
             child: Form(
               key: formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 로고 or 인사말 넣기
                   SizedBox(
+                    height: 50.0,
+                  ),
+                  Container(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '밥 한번 같이\n먹어볼까요? :)',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
                     width: 300.0,
-                    height: 300.0,
                   ),
-                  _Email(
-                    onSaved: (String? val) {
-                      email = val;
-                    },
+                  Column(
+                    children: [
+                      _Email(
+                        onSaved: (String? val) {
+                          email = val;
+                        },
+                        nextFocusNode: focusNode,
+                      ),
+                      SizedBox(height: 16.0),
+                      _Password(
+                        onSaved: (String? val) {
+                          password = val;
+                        },
+                        focusNode: focusNode,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 8.0),
-                  _Password(
-                    onSaved: (String? val) {
-                      password = val;
-                    },
+                  Column(
+                    children: [
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Colors.orange,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '로그인',
+                        onPressed: tryLogin,
+                      ),
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Colors.orangeAccent,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '회원가입',
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/signup');
+                        },
+                      ),
+                      BuildButton(
+                        width: 300,
+                        backgroundColor: Colors.orange,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: 'test',
+                        onPressed: (() =>
+                            Navigator.of(context).pushNamed('/home')),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 8.0),
-                  BuildButton(
-                    width: 300.0,
-                    backgroundColor: Colors.orange,
-                    textColor: Colors.white,
-                    pressedTextColor: Colors.black,
-                    text: '로그인',
-                    onPressed: tryLogin,
-                  ),
-                  BuildButton(
-                    width: 300.0,
-                    backgroundColor: Colors.orangeAccent,
-                    textColor: Colors.white,
-                    pressedTextColor: Colors.black,
-                    text: '회원가입',
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/signup');
-                    },
-                  ),
+                  SizedBox(height: bottomInset),
                 ],
               ),
             ),
@@ -86,29 +126,51 @@ class _LoginState extends State<Login> {
 
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      bool isLoginSuccess = true;
-      print('로그인 api 진행');
-      if (isLoginSuccess) {
-        print('로그인 성공');
-        // token, userNumber, username 넘겨주기
-        Navigator.of(context).pushNamed('/home');
-      } else {
-        print('로그인 실패');
-        // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
-        print('id or pw가 틀렸습니다');
-        print('잠시후 다시 시도해 주세요');
-      }
+      loginAPI();
     } else {
       print('포맷에러');
+    }
+  }
+
+  Future<void> loginAPI() async {
+    try {
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json',
+      };
+
+      final response = await http.post(
+        Uri.parse(''),
+        headers: headers,
+        body: jsonEncode(<String, String>{
+          'id': email!,
+          'password': password!,
+        }),
+      );
+      var data = jsonDecode(response.body);
+      debugPrint(response.body);
+      Navigator.of(context).pushNamed(
+        '/home',
+        arguments: {
+          'token': data['token'],
+          'userNumber': data['userNumber'],
+          'username': data['username'],
+        },
+      );
+    } catch (e) {
+      print('로그인 실패');
+      print('잠시후 다시 시도해 주세요');
+      throw Exception('Failed to load data');
     }
   }
 }
 
 class _Email extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
+  final FocusNode nextFocusNode;
 
   const _Email({
     required this.onSaved,
+    required this.nextFocusNode,
     super.key,
   });
 
@@ -120,17 +182,20 @@ class _Email extends StatelessWidget {
         Icons.email_outlined,
         color: Color(0xff7e7d7d),
       ),
-      isPW: false,
+      textType: 0,
       onSaved: onSaved,
+      nextFocusNode: nextFocusNode,
     );
   }
 }
 
 class _Password extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
+  final FocusNode focusNode;
 
   const _Password({
     required this.onSaved,
+    required this.focusNode,
     super.key,
   });
 
@@ -142,8 +207,9 @@ class _Password extends StatelessWidget {
         Icons.lock_outline,
         color: Color(0xff7e7d7d),
       ),
-      isPW: true,
+      textType: 1,
       onSaved: onSaved,
+      focusNode: focusNode,
     );
   }
 }
