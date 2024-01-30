@@ -115,7 +115,7 @@ class _SignupState extends State<Signup> {
 
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      singupAPI();
+      signupAPI();
     } else {
       print('포맷에러');
     }

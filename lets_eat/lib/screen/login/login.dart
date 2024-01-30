@@ -98,6 +98,15 @@ class _LoginState extends State<Login> {
                           Navigator.of(context).pushNamed('/signup');
                         },
                       ),
+                      BuildButton(
+                        width: 300,
+                        backgroundColor: Colors.orange,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: 'test',
+                        onPressed: (() =>
+                            Navigator.of(context).pushNamed('/home')),
+                      ),
                     ],
                   ),
                   SizedBox(height: bottomInset),

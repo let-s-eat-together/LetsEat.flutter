@@ -48,7 +48,8 @@ class _BuildTextFieldState extends State<BuildTextField> {
             if (val.length < 8) {
               return '최소 8자리 입니다.';
             }
-            if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#%&*~]).+$').hasMatch(val)) {
+            if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#%&*~]).+$')
+                .hasMatch(val)) {
               return '영문,숫자,특수문자(!@#%&*~)를 포함해야 합니다!';
             }
           } else if (widget.textType == 2) {

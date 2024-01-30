@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lets_eat/screen/home/home_screen.dart';
 
+import 'package:lets_eat/screen/home/home_screen.dart';
 import 'package:lets_eat/screen/login/login.dart';
 import 'package:lets_eat/screen/login/signup.dart';
 
-void main() {
-  runApp(MyApp());
+import 'package:shared_preferences/shared_preferences.dart';
+
+late SharedPreferences prefs;
+
+void main() async {
+  // 바인딩 초기화: main() 함수에서 async를 쓰려면 필요
+  WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -22,10 +30,9 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => Login(),
-        '/signup' : (context) => Signup(),
-        '/home' : (context) => HomeUI(),
+        '/signup': (context) => Signup(),
+        '/home': (context) => HomeUI(),
       },
     );
   }
 }
-
