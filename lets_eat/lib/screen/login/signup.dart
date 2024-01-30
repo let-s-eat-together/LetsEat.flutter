@@ -121,60 +121,75 @@ class _SignupState extends State<Signup> {
     }
   }
 
-  Future<void> signupAPI() async {
+  void singupAPI() async {
+    final url = Uri.parse('');
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
-
+    final Map<String, String> body = {
+      'id': email!,
+      'password': password!,
+      'username': nickname!,
+    };
     try {
       final response = await http.post(
-        Uri.parse(''),
+        url,
         headers: headers,
-        body: jsonEncode(<String, String>{
-          'id': email!,
-          'password': password!,
-          'username': nickname!,
-        }),
+        body: jsonEncode(body),
       );
-      debugPrint(response.body);
-      loginAPI();
-    } catch (e) {
-      print('회원가입 실패');
-      // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
-      print('~가 틀렸습니다');
-      print('잠시후 다시 시도해 주세요');
-      throw Exception('Failed to load data');
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        print(data);
+        // email, password로 loginAPI 시도
+        loginAPI();
+      } else {
+        print('회원가입 실패');
+        // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
+        print('~가 틀렸습니다');
+        print('잠시후 다시 시도해 주세요');
+        throw Exception('Failed to load data');
+      }
+    } catch(e) {
+      print('http post 실패');
     }
   }
 
-  Future<void> loginAPI() async {
+  void loginAPI() async {
+    final url = Uri.parse('');
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+    final Map<String, String> body = {
+      'id': email!,
+      'password': password!,
+    };
     try {
-      final Map<String, String> headers = {
-        'Content-Type': 'application/json',
-      };
-
       final response = await http.post(
-        Uri.parse(''),
+        url,
         headers: headers,
-        body: jsonEncode(<String, String>{
-          'id': email!,
-          'password': password!,
-        }),
+        body: jsonEncode(body),
       );
-      var data = jsonDecode(response.body);
-      debugPrint(response.body);
-      Navigator.of(context).pushNamed(
-        '/home',
-        arguments: {
-          'token': data['token'],
-          'userNumber': data['userNumber'],
-          'username': data['username'],
-        },
-      );
-    } catch (e) {
-      print('로그인 실패');
-      print('잠시후 다시 시도해 주세요');
-      throw Exception('Failed to load data');
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        print(data);
+        // token, userNumber, username 넘겨주기
+        Navigator.of(context).pushNamed(
+          '/home',
+          arguments: {
+            'token': data['token'],
+            'userNumber': data['userNumber'],
+            'username': data['username'],
+          },
+        );
+      } else {
+        print('로그인 실패');
+        // id & pw 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
+        print('id or pw가 틀렸습니다');
+        print('잠시후 다시 시도해 주세요');
+        throw Exception('Failed to load data');
+      }
+    } catch(e) {
+      print('http post 실패');
     }
   }
 }
