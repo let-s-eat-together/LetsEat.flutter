@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-
-import 'package:lets_eat/model/API.dart';
-
+import 'package:lets_eat/models/API.dart';
+import 'dart:convert';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:http/http.dart' as http;
 
 class QRCameraScreen extends StatefulWidget {
+  const QRCameraScreen({super.key});
+
   @override
   _QRCameraScreenState createState() => _QRCameraScreenState();
 }
@@ -20,19 +19,14 @@ class _QRCameraScreenState extends State<QRCameraScreen> {
       String friendId = datas[1];
       sendQRData(expirationDate, friendId);
     } else {
-      print('QR코드를 다시 스캔해주세요.');
+      debugPrint('QR코드를 다시 스캔해주세요.');
     }
   }
 
   Future<void> sendQRData(String? expirationDate, String? friendId) async {
-    final Map<String, String> headers = {
-      // 'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json;',
-    };
-
     try {
       final response = await http.post(
-        Uri.parse(baseUrl + ApiType.addFriend.rawValue),
+        Uri.parse(baseUrl + ApiType.requestFriend.rawValue),
         headers: headers,
         body: jsonEncode(
           <String, dynamic>{
@@ -42,8 +36,7 @@ class _QRCameraScreenState extends State<QRCameraScreen> {
           },
         ),
       );
-      // debugPrint(response.body);
-      debugPrint('Success: $response');
+      debugPrint(response.body);
     } catch (e) {
       debugPrint('Failed to request: $e');
     }
@@ -60,11 +53,8 @@ class _QRCameraScreenState extends State<QRCameraScreen> {
         ),
         onDetect: (capture) {
           final List<Barcode> barcodes = capture.barcodes;
-          // final Uint8List? image = capture.image;
           final String rawString = barcodes[0].rawValue.toString();
           final List<String> datas = rawString.split('\n');
-          // final List<dynamic> datas = barcodes.rawsplit(' ');
-          // final List<String> datas = capture.raw.split('+');
           // for (final barcode in barcodes) {
           //   debugPrint('${barcodes.length}: ${barcode.rawValue}');
           // }

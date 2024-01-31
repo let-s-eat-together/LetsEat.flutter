@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class ProfileEditScreen extends StatefulWidget {
   final ValueChanged<bool> onProfileChanged;
 
-  const ProfileEditScreen({Key? key, required this.onProfileChanged}) : super(key: key);
+  const ProfileEditScreen({Key? key, required this.onProfileChanged})
+      : super(key: key);
 
   @override
   _ProfileEditScreenState createState() => _ProfileEditScreenState();
@@ -14,7 +15,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   bool showAlert = false;
   TextEditingController usernameController = TextEditingController();
 
-  final String regex = r"^[^\s]+$";
+  final String regex = r'^[^\s]+$';
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           children: [
             Spacer(),
             Text(
-              "프로필 수정",
+              '프로필 수정',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
@@ -39,7 +40,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 });
               },
               decoration: InputDecoration(
-                hintText: "이름을 수정해주세요...",
+                hintText: '이름을 수정해주세요...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
@@ -58,7 +59,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    isOK ? "사용 가능한 닉네임입니다." : "사용 불가한 닉네임입니다.",
+                    isOK ? '사용 가능한 닉네임입니다.' : '사용 불가한 닉네임입니다.',
                     style: TextStyle(
                       fontSize: 12,
                       color: isOK ? Colors.green : Colors.red,
@@ -79,22 +80,25 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   });
                 }
               },
-              child: Text("완료"),
+              child: Text('완료'),
             ),
             showAlert
                 ? AlertDialog(
-              title: Text("닉네임이 올바르지 않습니다!", style: TextStyle(fontSize: 14),),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      showAlert = false;
-                    });
-                  },
-                  child: Text("확인"),
-                ),
-              ],
-            )
+                    title: Text(
+                      '닉네임이 올바르지 않습니다!',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            showAlert = false;
+                          });
+                        },
+                        child: Text('확인'),
+                      ),
+                    ],
+                  )
                 : Container(),
             Spacer(),
           ],

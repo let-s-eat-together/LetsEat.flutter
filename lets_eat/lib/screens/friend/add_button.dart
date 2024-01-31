@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:lets_eat/model/API.dart';
+import 'package:lets_eat/models/API.dart';
 
 class AddButton extends StatefulWidget {
   final String friendName;
@@ -21,7 +21,7 @@ class _AddButtonState extends State<AddButton> {
 
     try {
       final response = await http.post(
-        Uri.parse(baseUrl + ApiType.addFriend.rawValue),
+        Uri.parse(baseUrl + ApiType.requestFriend.rawValue),
         headers: headers,
       );
       print(response.body);

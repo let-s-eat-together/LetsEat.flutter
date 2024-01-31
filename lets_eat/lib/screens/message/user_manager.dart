@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:lets_eat/model/user.dart';
+import 'package:lets_eat/models/user.dart';
 
 class UserManager {
   static final UserManager _instance = UserManager._internal();

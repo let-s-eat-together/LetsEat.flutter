@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:lets_eat/screen/home/home_screen.dart';
-import 'package:lets_eat/screen/login/login.dart';
-import 'package:lets_eat/screen/login/signup.dart';
+import 'package:lets_eat/screens/home/home_screen.dart';
+import 'package:lets_eat/screens/login/login.dart';
+import 'package:lets_eat/screens/login/signup.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 

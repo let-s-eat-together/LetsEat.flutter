@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:lets_eat/model/friend.dart';
-import 'package:lets_eat/screen/friend/add_button.dart';
+import 'package:lets_eat/models/friend.dart';
+import 'package:lets_eat/screens/friend/add_button.dart';
 
 class FriendListScreen extends StatefulWidget {
   @override
@@ -11,23 +11,23 @@ class FriendListScreen extends StatefulWidget {
 class _FriendListScreenState extends State<FriendListScreen> {
   String searchText = '';
   final List<String> friendList = [
-    "김서근",
-    "포뇨",
-    "하울",
-    "소피아",
-    "캐시퍼",
-    "소스케",
-    "치히로",
-    "하쿠",
-    "가오나시",
-    "제니바",
-    "카브",
-    "마르클",
-    "토토로",
-    "사츠키",
-    "지브리",
-    "스튜디오",
-    "캐릭터"
+    '김서근',
+    '포뇨',
+    '하울',
+    '소피아',
+    '캐시퍼',
+    '소스케',
+    '치히로',
+    '하쿠',
+    '가오나시',
+    '제니바',
+    '카브',
+    '마르클',
+    '토토로',
+    '사츠키',
+    '지브리',
+    '스튜디오',
+    '캐릭터'
   ];
 
   List<Friend> parseFriends(String responseBody) {
@@ -49,15 +49,15 @@ class _FriendListScreenState extends State<FriendListScreen> {
               },
             ),
             Expanded(
-              child: ListView.builder(
+              child: ListView.separated(
                 itemCount: friendList
                     .where((name) =>
-                        name.startsWith(searchText) || searchText == "")
+                        name.startsWith(searchText) || searchText == '')
                     .length,
                 itemBuilder: (context, index) {
                   String name = friendList
                       .where((name) =>
-                          name.startsWith(searchText) || searchText == "")
+                          name.startsWith(searchText) || searchText == '')
                       .elementAt(index);
                   return ListTile(
                     leading: CircleAvatar(
@@ -68,6 +68,9 @@ class _FriendListScreenState extends State<FriendListScreen> {
                       friendName: name,
                     ),
                   );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider();
                 },
               ),
             ),
@@ -90,7 +93,7 @@ class SearchTextField extends StatelessWidget {
       child: TextField(
         onChanged: onChanged,
         decoration: InputDecoration(
-          hintText: "Search",
+          hintText: 'Search',
           prefixIcon: const Icon(Icons.search),
           suffixIcon: const Icon(Icons.clear),
           border: OutlineInputBorder(

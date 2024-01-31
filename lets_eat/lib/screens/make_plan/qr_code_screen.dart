@@ -15,7 +15,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("QR Code")),
+      appBar: AppBar(title: const Text('QR Code')),
       body: SafeArea(
         child: Center(
           child: QrImageView(

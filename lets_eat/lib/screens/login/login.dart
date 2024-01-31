@@ -2,27 +2,29 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../../component/build_button.dart';
-import '../../component/build_textfield.dart';
+import 'package:lets_eat/models/API.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({super.key});
+import '../../widgets/build_button.dart';
+import '../../widgets/build_textfield.dart';
+
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<Login> createState() => _LoginState();
 }
 
-class _SignupState extends State<Signup> {
+class _LoginState extends State<Login> {
   final GlobalKey<FormState> formKey = GlobalKey();
 
   String? email;
   String? password;
-  String? nickname;
 
-  FocusNode focusNode1 = FocusNode();
-  FocusNode focusNode2 = FocusNode();
+  FocusNode focusNode = FocusNode();
 
+  String? token;
   int? userNumber;
+  String? username;
 
   @override
   Widget build(BuildContext context) {
@@ -47,23 +49,18 @@ class _SignupState extends State<Signup> {
                   SizedBox(
                     height: 50.0,
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        'Hey, there',
+                  Container(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '밥 한번 같이\n먹어볼까요? :)',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 40,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Text(
-                        'Create an Account',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ],
+                    ),
+                    width: 300.0,
                   ),
                   Column(
                     children: [
@@ -71,32 +68,47 @@ class _SignupState extends State<Signup> {
                         onSaved: (String? val) {
                           email = val;
                         },
-                        nextFocusNode: focusNode1,
+                        nextFocusNode: focusNode,
                       ),
-                      SizedBox(height: 8.0),
+                      SizedBox(height: 16.0),
                       _Password(
                         onSaved: (String? val) {
                           password = val;
                         },
-                        focusNode: focusNode1,
-                        nextFocusNode: focusNode2,
-                      ),
-                      SizedBox(height: 8.0),
-                      _Nickname(
-                        onSaved: (String? val) {
-                          nickname = val;
-                        },
-                        focusNode: focusNode2,
+                        focusNode: focusNode,
                       ),
                     ],
                   ),
-                  BuildButton(
-                    width: 300.0,
-                    backgroundColor: Colors.orange,
-                    textColor: Colors.white,
-                    pressedTextColor: Colors.black,
-                    text: '시작하기',
-                    onPressed: trySignup,
+                  Column(
+                    children: [
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Colors.orange,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '로그인',
+                        onPressed: tryLogin,
+                      ),
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Colors.orangeAccent,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '회원가입',
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/signup');
+                        },
+                      ),
+                      BuildButton(
+                        width: 300,
+                        backgroundColor: Colors.orange,
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: 'test',
+                        onPressed: (() =>
+                            Navigator.of(context).pushNamed('/home')),
+                      ),
+                    ],
                   ),
                   SizedBox(height: bottomInset),
                 ],
@@ -108,54 +120,24 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  void trySignup() {
+  void tryLogin() {
     if (formKey.currentState == null) {
       return;
     }
 
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      signupAPI();
+      loginAPI();
     } else {
       print('포맷에러');
     }
   }
 
-  Future<void> signupAPI() async {
-    final Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    try {
-      final response = await http.post(
-        Uri.parse(''),
-        headers: headers,
-        body: jsonEncode(<String, String>{
-          'id': email!,
-          'password': password!,
-          'username': nickname!,
-        }),
-      );
-      debugPrint(response.body);
-      loginAPI();
-    } catch (e) {
-      print('회원가입 실패');
-      // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
-      print('~가 틀렸습니다');
-      print('잠시후 다시 시도해 주세요');
-      throw Exception('Failed to load data');
-    }
-  }
-
   Future<void> loginAPI() async {
     try {
-      final Map<String, String> headers = {
-        'Content-Type': 'application/json',
-      };
-
       final response = await http.post(
-        Uri.parse(''),
-        headers: headers,
+        Uri.parse(baseUrl + ApiType.login.rawValue),
+        // headers: headers,
         body: jsonEncode(<String, String>{
           'id': email!,
           'password': password!,
@@ -192,7 +174,7 @@ class _Email extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BuildTextField(
-      hintText: "이메일 주소",
+      hintText: 'Email',
       icon: Icon(
         Icons.email_outlined,
         color: Color(0xff7e7d7d),
@@ -207,50 +189,22 @@ class _Email extends StatelessWidget {
 class _Password extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
   final FocusNode focusNode;
-  final FocusNode nextFocusNode;
 
   const _Password({
     required this.onSaved,
     required this.focusNode,
-    required this.nextFocusNode,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return BuildTextField(
-      hintText: "비밀번호를 입력해주세요",
+      hintText: 'Password',
       icon: Icon(
         Icons.lock_outline,
         color: Color(0xff7e7d7d),
       ),
       textType: 1,
-      onSaved: onSaved,
-      focusNode: focusNode,
-      nextFocusNode: nextFocusNode,
-    );
-  }
-}
-
-class _Nickname extends StatelessWidget {
-  final FormFieldSetter<String> onSaved;
-  final FocusNode focusNode;
-
-  const _Nickname({
-    required this.onSaved,
-    required this.focusNode,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BuildTextField(
-      hintText: "닉네임을 입력해주세요",
-      icon: Icon(
-        Icons.star,
-        color: Color(0xff7e7d7d),
-      ),
-      textType: 2,
       onSaved: onSaved,
       focusNode: focusNode,
     );

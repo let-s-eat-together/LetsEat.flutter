@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:lets_eat/screen/profile/profile_edit_screen.dart';
+import 'package:lets_eat/screens/setting/profile_edit_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Settings"),
-        ),
-        body: ListView(
+      body: SafeArea(
+        child: ListView(
           padding: EdgeInsets.all(16),
           children: [
             ProfileCard(),
@@ -17,19 +15,21 @@ class ProfileScreen extends StatelessWidget {
             DarkModeToggle(),
             SizedBox(height: 20),
             SettingsItem(
-                title: "이용약관",
-                onTap: () => _navigateToTextScreen(context, "이용 약관")),
+                title: '이용약관',
+                onTap: () => _navigateToTextScreen(context, '이용 약관')),
             SettingsItem(
-                title: "개인 정보 처리 방침",
-                onTap: () => _navigateToTextScreen(context, "개인 정보 처리 방침")),
+                title: '개인 정보 처리 방침',
+                onTap: () => _navigateToTextScreen(context, '개인 정보 처리 방침')),
             SettingsItem(
-                title: "버전 정보",
-                onTap: () => _navigateToTextScreen(context, "버전 정보")),
+                title: '버전 정보',
+                onTap: () => _navigateToTextScreen(context, '버전 정보')),
             SizedBox(height: 20),
             LogOutButton(),
             WithdrawButton(),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   void _navigateToTextScreen(BuildContext context, String title) {
@@ -46,8 +46,8 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Replace with your actual profile data and image
-    String nickname = "김바보";
-    String profileImage = "assets/profile_image.jpg";
+    String nickname = '김바보';
+    String profileImage = 'assets/profile_image.jpg';
 
     return Card(
       elevation: 4,
@@ -79,7 +79,7 @@ class ProfileCard extends StatelessWidget {
               ),
             );
           },
-          child: Text("프로필 수정"),
+          child: Text('프로필 수정'),
         ),
       ),
     );
@@ -97,7 +97,7 @@ class _PushAlarmToggleState extends State<PushAlarmToggle> {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      title: Text("푸시 알림"),
+      title: Text('푸시 알림'),
       value: _isPushEnabled,
       onChanged: (value) {
         setState(() {
@@ -119,7 +119,7 @@ class _DarkModeToggleState extends State<DarkModeToggle> {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      title: Text("다크 모드"),
+      title: Text('다크 모드'),
       value: _isDarkModeEnabled,
       onChanged: (value) {
         setState(() {
@@ -164,7 +164,7 @@ class LogOutButton extends StatelessWidget {
             primary: Colors.black, // Text color
           ),
           child: Text(
-            "로그아웃",
+            '로그아웃',
             style: TextStyle(
               fontSize: 16,
               color: Colors.blue,
@@ -193,7 +193,7 @@ class WithdrawButton extends StatelessWidget {
             primary: Colors.black, // Text color
           ),
           child: Text(
-            "탈퇴하기",
+            '탈퇴하기',
             style: TextStyle(
               fontSize: 16,
               color: Colors.blue,
@@ -229,7 +229,7 @@ class TextScreen extends StatelessWidget {
           title: Text(title),
         ),
         body: Center(
-          child: Text("$title 테스트"),
+          child: Text('$title 테스트'),
         ));
   }
 }

@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:lets_eat/model/message.dart';
-import 'package:lets_eat/screen/message/user_manager.dart';
+import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/models/message.dart';
+import 'package:lets_eat/screens/message/user_manager.dart';
 
 class MessageManager {
   static final MessageManager _instance = MessageManager._internal();
@@ -16,16 +17,10 @@ class MessageManager {
   List<Message> messageList = [];
 
   Future<void> fetchMessages() async {
-    final url = Uri.parse("http://34.22.94.135:8080/sting");
-    // final accessToken = userManager.userInfo.token;
-
-    final headers = {
-      // "Authorization": "Bearer $accessToken",
-      "Content-Type": "application/json",
-    };
-
     try {
-      final response = await http.get(url, headers: headers);
+      final response = await http.get(
+          Uri.parse(baseUrl + ApiType.getMessages.rawValue),
+          headers: headers);
 
       final List<dynamic> jsonMessages = jsonDecode(response.body);
 
@@ -41,7 +36,7 @@ class MessageManager {
 
       messageList = messages;
     } catch (error) {
-      print("Error fetching messages: $error");
+      print('Error fetching messages: $error');
     }
   }
 
