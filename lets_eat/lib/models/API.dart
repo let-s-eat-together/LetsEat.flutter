@@ -1,9 +1,9 @@
 // uri
-const String baseUrl = 'http://localhost:8080/';
+const String baseUrl = 'http://34.64.105.81:8080/';
 
 final Map<String, String> headers = {
   // 'Authorization': 'Bearer $token',
-  'Content-Type': 'application/json;',
+  'Content-Type': 'application/json',
 };
 
 // api type

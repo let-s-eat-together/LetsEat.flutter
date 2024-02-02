@@ -136,6 +136,7 @@ class _SignupState extends State<Signup> {
       debugPrint(response.body);
       loginAPI();
     } catch (e) {
+      print(e);
       print('회원가입 실패');
       // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
       print('~가 틀렸습니다');
