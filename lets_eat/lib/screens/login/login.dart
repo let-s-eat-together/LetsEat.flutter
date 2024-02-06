@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/utils/api_login.dart';
 
 import '../../widgets/build_button.dart';
 import '../../widgets/build_textfield.dart';
@@ -37,7 +38,7 @@ class _LoginState extends State<Login> {
       },
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             height: height,
             child: Form(
@@ -46,10 +47,11 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 50.0,
                   ),
-                  Container(
+                  const SizedBox(
+                    width: 300.0,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -60,7 +62,6 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    width: 300.0,
                   ),
                   Column(
                     children: [
@@ -70,7 +71,7 @@ class _LoginState extends State<Login> {
                         },
                         nextFocusNode: focusNode,
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       _Password(
                         onSaved: (String? val) {
                           password = val;
@@ -83,7 +84,7 @@ class _LoginState extends State<Login> {
                     children: [
                       BuildButton(
                         width: 300.0,
-                        backgroundColor: Colors.orange,
+                        backgroundColor: Color.fromARGB(255, 187, 157, 211),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: '로그인',
@@ -91,7 +92,7 @@ class _LoginState extends State<Login> {
                       ),
                       BuildButton(
                         width: 300.0,
-                        backgroundColor: Colors.orangeAccent,
+                        backgroundColor: Color.fromARGB(255, 164, 111, 206),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: '회원가입',
@@ -101,7 +102,7 @@ class _LoginState extends State<Login> {
                       ),
                       BuildButton(
                         width: 300,
-                        backgroundColor: Colors.orange,
+                        backgroundColor: Color.fromARGB(255, 187, 157, 211),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: 'test',
@@ -127,36 +128,9 @@ class _LoginState extends State<Login> {
 
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      loginAPI();
+      loginAPI(email, password, context);
     } else {
-      print('포맷에러');
-    }
-  }
-
-  Future<void> loginAPI() async {
-    try {
-      final response = await http.post(
-        Uri.parse(baseUrl + ApiType.login.rawValue),
-        // headers: headers,
-        body: jsonEncode(<String, String>{
-          'id': email!,
-          'password': password!,
-        }),
-      );
-      var data = jsonDecode(response.body);
-      debugPrint(response.body);
-      Navigator.of(context).pushNamed(
-        '/home',
-        arguments: {
-          'token': data['token'],
-          'userNumber': data['userNumber'],
-          'username': data['username'],
-        },
-      );
-    } catch (e) {
-      print('로그인 실패');
-      print('잠시후 다시 시도해 주세요');
-      throw Exception('Failed to load data');
+      debugPrint('포맷에러');
     }
   }
 }
@@ -168,14 +142,13 @@ class _Email extends StatelessWidget {
   const _Email({
     required this.onSaved,
     required this.nextFocusNode,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return BuildTextField(
       hintText: 'Email',
-      icon: Icon(
+      icon: const Icon(
         Icons.email_outlined,
         color: Color(0xff7e7d7d),
       ),
@@ -193,14 +166,13 @@ class _Password extends StatelessWidget {
   const _Password({
     required this.onSaved,
     required this.focusNode,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return BuildTextField(
       hintText: 'Password',
-      icon: Icon(
+      icon: const Icon(
         Icons.lock_outline,
         color: Color(0xff7e7d7d),
       ),

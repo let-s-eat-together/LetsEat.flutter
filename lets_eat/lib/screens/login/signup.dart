@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/utils/api_signup.dart';
 import '../../widgets/build_button.dart';
 import '../../widgets/build_textfield.dart';
 
@@ -36,7 +33,7 @@ class _SignupState extends State<Signup> {
       },
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             height: height,
             child: Form(
@@ -45,10 +42,10 @@ class _SignupState extends State<Signup> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 50.0,
                   ),
-                  Column(
+                  const Column(
                     children: [
                       Text(
                         'Hey, there',
@@ -74,7 +71,7 @@ class _SignupState extends State<Signup> {
                         },
                         nextFocusNode: focusNode1,
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       _Password(
                         onSaved: (String? val) {
                           password = val;
@@ -82,7 +79,7 @@ class _SignupState extends State<Signup> {
                         focusNode: focusNode1,
                         nextFocusNode: focusNode2,
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       _Nickname(
                         onSaved: (String? val) {
                           nickname = val;
@@ -91,13 +88,27 @@ class _SignupState extends State<Signup> {
                       ),
                     ],
                   ),
-                  BuildButton(
-                    width: 300.0,
-                    backgroundColor: Colors.orange,
-                    textColor: Colors.white,
-                    pressedTextColor: Colors.black,
-                    text: '시작하기',
-                    onPressed: trySignup,
+                  Column(
+                    children: [
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Color.fromARGB(255, 164, 111, 206),
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '시작하기',
+                        onPressed: trySignup,
+                      ),
+                      BuildButton(
+                        width: 300.0,
+                        backgroundColor: Color.fromARGB(255, 187, 157, 211),
+                        textColor: Colors.white,
+                        pressedTextColor: Colors.black,
+                        text: '돌아가기',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
                   ),
                   SizedBox(height: bottomInset),
                 ],
@@ -116,58 +127,9 @@ class _SignupState extends State<Signup> {
 
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      signupAPI();
+      signupAPI(email, password, nickname, context);
     } else {
-      print('포맷에러');
-    }
-  }
-
-  Future<void> signupAPI() async {
-    try {
-      final response = await http.post(
-        Uri.parse(baseUrl + ApiType.signup.rawValue),
-        headers: headers,
-        body: jsonEncode(<String, String>{
-          'id': email!,
-          'password': password!,
-          'username': nickname!,
-        }),
-      );
-      debugPrint(response.body);
-      loginAPI();
-    } catch (e) {
-      print('회원가입 실패');
-      // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
-      print('~가 틀렸습니다');
-      print('잠시후 다시 시도해 주세요');
-      throw Exception('Failed to load data');
-    }
-  }
-
-  Future<void> loginAPI() async {
-    try {
-      final response = await http.post(
-        Uri.parse(baseUrl + ApiType.login.rawValue),
-        headers: headers,
-        body: jsonEncode(<String, String>{
-          'id': email!,
-          'password': password!,
-        }),
-      );
-      var data = jsonDecode(response.body);
-      debugPrint(response.body);
-      Navigator.of(context).pushNamed(
-        '/home',
-        arguments: {
-          'token': data['token'],
-          'userNumber': data['userNumber'],
-          'username': data['username'],
-        },
-      );
-    } catch (e) {
-      print('로그인 실패');
-      print('잠시후 다시 시도해 주세요');
-      throw Exception('Failed to load data');
+      debugPrint('포맷에러');
     }
   }
 }
@@ -179,14 +141,13 @@ class _Email extends StatelessWidget {
   const _Email({
     required this.onSaved,
     required this.nextFocusNode,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return BuildTextField(
       hintText: '이메일 주소',
-      icon: Icon(
+      icon: const Icon(
         Icons.email_outlined,
         color: Color(0xff7e7d7d),
       ),
@@ -206,14 +167,13 @@ class _Password extends StatelessWidget {
     required this.onSaved,
     required this.focusNode,
     required this.nextFocusNode,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return BuildTextField(
       hintText: '비밀번호를 입력해주세요',
-      icon: Icon(
+      icon: const Icon(
         Icons.lock_outline,
         color: Color(0xff7e7d7d),
       ),
@@ -232,14 +192,13 @@ class _Nickname extends StatelessWidget {
   const _Nickname({
     required this.onSaved,
     required this.focusNode,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return BuildTextField(
       hintText: '닉네임을 입력해주세요',
-      icon: Icon(
+      icon: const Icon(
         Icons.star,
         color: Color(0xff7e7d7d),
       ),
