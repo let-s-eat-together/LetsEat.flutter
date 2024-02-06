@@ -92,7 +92,8 @@ class _SignupState extends State<Signup> {
                     children: [
                       BuildButton(
                         width: 300.0,
-                        backgroundColor: Color.fromARGB(255, 164, 111, 206),
+                        backgroundColor:
+                            const Color.fromARGB(255, 164, 111, 206),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: '시작하기',
@@ -100,7 +101,8 @@ class _SignupState extends State<Signup> {
                       ),
                       BuildButton(
                         width: 300.0,
-                        backgroundColor: Color.fromARGB(255, 187, 157, 211),
+                        backgroundColor:
+                            const Color.fromARGB(255, 187, 157, 211),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: '돌아가기',
@@ -127,9 +129,9 @@ class _SignupState extends State<Signup> {
 
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      signupAPI(email, password, nickname, context);
+      signupAPI(email!, password!, nickname!, context);
     } else {
-      debugPrint('포맷에러');
+      print('포맷에러');
     }
   }
 }

@@ -1,8 +1,5 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:lets_eat/models/API.dart';
 import 'package:lets_eat/utils/api_login.dart';
 
 import '../../widgets/build_button.dart';
@@ -84,7 +81,7 @@ class _LoginState extends State<Login> {
                     children: [
                       BuildButton(
                         width: 300.0,
-                        backgroundColor: Color.fromARGB(255, 187, 157, 211),
+                        backgroundColor: const Color.fromARGB(255, 187, 157, 211),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: '로그인',
@@ -92,7 +89,7 @@ class _LoginState extends State<Login> {
                       ),
                       BuildButton(
                         width: 300.0,
-                        backgroundColor: Color.fromARGB(255, 164, 111, 206),
+                        backgroundColor: const Color.fromARGB(255, 164, 111, 206),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: '회원가입',
@@ -102,7 +99,7 @@ class _LoginState extends State<Login> {
                       ),
                       BuildButton(
                         width: 300,
-                        backgroundColor: Color.fromARGB(255, 187, 157, 211),
+                        backgroundColor: const Color.fromARGB(255, 187, 157, 211),
                         textColor: Colors.white,
                         pressedTextColor: Colors.black,
                         text: 'test',

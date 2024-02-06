@@ -6,7 +6,8 @@ class StingButton extends StatefulWidget {
   final String otherUserName;
   final int planId;
 
-  StingButton({required this.otherUserName, required this.planId});
+  const StingButton(
+      {super.key, required this.otherUserName, required this.planId});
 
   @override
   _StingButtonState createState() => _StingButtonState();
@@ -16,7 +17,7 @@ class _StingButtonState extends State<StingButton> {
   Future<void> sting() async {
     try {
       final response = await http.post(
-        Uri.parse(baseUrl + ApiType.sting.rawValue),
+        Uri.parse('$baseUrl${ApiType.sting.rawValue}/${widget.planId}'),
         headers: headers,
       );
       debugPrint(response.body);

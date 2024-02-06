@@ -6,6 +6,8 @@ import 'package:lets_eat/models/plan.dart';
 import 'package:lets_eat/screens/plan/sting_button.dart';
 
 class PlanScreen extends StatefulWidget {
+  const PlanScreen({super.key});
+
   @override
   _PlanScreenState createState() => _PlanScreenState();
 }
@@ -55,14 +57,26 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 187, 157, 211),
+        title: const Text(
+          '약속',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: getPlanList,
           child: planList.isEmpty
               ? const Center(
                   child: Text(
-                    'No Data',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    '친구와의 약속이 없습니다.',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                 )
               : ListView.separated(

@@ -4,6 +4,8 @@ import 'package:lets_eat/screens/make_plan/qr_camera_screen.dart';
 import 'package:lets_eat/screens/make_plan/qr_code_screen.dart';
 
 class MakePlanView extends StatefulWidget {
+  const MakePlanView({super.key});
+
   @override
   _MakePlanViewState createState() => _MakePlanViewState();
 }
@@ -14,6 +16,18 @@ class _MakePlanViewState extends State<MakePlanView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 187, 157, 211),
+        title: const Text(
+          '만들기',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: ListView(
           children: <Widget>[
@@ -41,7 +55,8 @@ class _MakePlanViewState extends State<MakePlanView> {
               title: const Text('QR코드 스캔하기'), // CameraView() 대체
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => QRCameraScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const QRCameraScreen()),
                 );
                 // 카메라 뷰 로직 구현
               },
