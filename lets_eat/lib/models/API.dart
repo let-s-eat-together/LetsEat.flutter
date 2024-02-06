@@ -1,4 +1,3 @@
-// uri
 const String baseUrl = 'http://34.64.105.81:8080/';
 
 final Map<String, String> headers = {

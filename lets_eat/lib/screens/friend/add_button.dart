@@ -5,7 +5,7 @@ import 'package:lets_eat/models/API.dart';
 class AddButton extends StatefulWidget {
   final String friendName;
 
-  AddButton({required this.friendName});
+  const AddButton({super.key, required this.friendName});
 
   @override
   _AddButtonState createState() => _AddButtonState();
@@ -13,27 +13,23 @@ class AddButton extends StatefulWidget {
 
 class _AddButtonState extends State<AddButton> {
   Future<void> addFriend(String to) async {
-    print('add $to');
-    final Map<String, String> headers = {
-      // 'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json;',
-    };
+    debugPrint('add $to');
 
     try {
       final response = await http.post(
         Uri.parse(baseUrl + ApiType.requestFriend.rawValue),
         headers: headers,
       );
-      print(response.body);
+      debugPrint(response.body);
     } catch (e) {
-      print('Failed to request: $e');
+      debugPrint('Failed to request: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.add_circle),
+      icon: const Icon(Icons.add_circle),
       onPressed: () {
         // Add your logic for adding a friend here
         // You can open a dialog, navigate to another screen, etc.
@@ -42,18 +38,18 @@ class _AddButtonState extends State<AddButton> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('친구 추가'),
+                title: const Text('친구 추가'),
                 content: Text('${widget.friendName}을 친구 추가하시겠습니까?'),
                 actions: [
                   TextButton(
-                    child: Text('Yes'),
+                    child: const Text('Yes'),
                     onPressed: () {
                       addFriend(widget.friendName);
                       Navigator.of(context).pop();
                     },
                   ),
                   TextButton(
-                    child: Text('No'),
+                    child: const Text('No'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

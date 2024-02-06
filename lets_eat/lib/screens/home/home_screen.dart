@@ -7,6 +7,8 @@ import 'package:lets_eat/screens/plan/plan_screen.dart';
 import 'package:lets_eat/screens/setting/setting_screen.dart';
 
 class HomeUI extends StatefulWidget {
+  const HomeUI({super.key});
+
   @override
   _HomeUI createState() => _HomeUI();
 }
@@ -16,15 +18,15 @@ class _HomeUI extends State<HomeUI> {
 
   // BottomNavigation Items
   final List _widgetOptions = [
-    PlanScreen(), // Plan
+    const PlanScreen(), // Plan
 
-    FriendListScreen(), // Friends
+    const FriendListScreen(), // Friends
 
-    MakePlanView(), // Make Plan
+    const MakePlanView(), // Make Plan
 
-    MessageScreen(), // Message
+    const MessageScreen(), // Message
 
-    ProfileScreen(), // Profile
+    const ProfileScreen(), // Profile
   ];
 
   @override
@@ -32,17 +34,6 @@ class _HomeUI extends State<HomeUI> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            tabs[_selectedIndex].label,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),

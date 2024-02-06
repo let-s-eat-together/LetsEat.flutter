@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lets_eat/models/user.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRCodeScreen extends StatefulWidget {
@@ -12,6 +13,18 @@ class QRCodeScreen extends StatefulWidget {
 }
 
 class _QRCodeScreenState extends State<QRCodeScreen> {
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  _getUser() async {
+    user = await UserDataManager.getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +32,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
       body: SafeArea(
         child: Center(
           child: QrImageView(
-            data: '${widget.expirationDate.toString()}\ntest',
+            data: '${widget.expirationDate.toString()}\n${user?.id}',
             size: 200,
             version: QrVersions.auto,
           ),

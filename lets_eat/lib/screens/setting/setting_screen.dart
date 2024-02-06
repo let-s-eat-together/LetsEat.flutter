@@ -1,31 +1,86 @@
-import 'package:flutter/material.dart';
-import 'package:lets_eat/screens/setting/profile_edit_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:lets_eat/models/user.dart';
+import 'package:lets_eat/widgets/logout_button.dart';
+import 'package:lets_eat/widgets/profile_card.dart';
+import 'package:lets_eat/widgets/withdraw_button.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  _getUser() async {
+    user = await UserDataManager.getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 187, 157, 211),
+        title: const Text(
+          '설정',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: ListView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           children: [
-            ProfileCard(),
-            SizedBox(height: 16),
-            PushAlarmToggle(),
-            DarkModeToggle(),
-            SizedBox(height: 20),
-            SettingsItem(
-                title: '이용약관',
-                onTap: () => _navigateToTextScreen(context, '이용 약관')),
-            SettingsItem(
-                title: '개인 정보 처리 방침',
-                onTap: () => _navigateToTextScreen(context, '개인 정보 처리 방침')),
-            SettingsItem(
-                title: '버전 정보',
-                onTap: () => _navigateToTextScreen(context, '버전 정보')),
-            SizedBox(height: 20),
-            LogOutButton(),
-            WithdrawButton(),
+            user == null
+                ? ProfileCard(
+                    user: User(
+                    username: 'Default',
+                    id: 1,
+                    token: 'token',
+                  ))
+                : ProfileCard(user: user!),
+            const SizedBox(height: 20),
+            const PushAlarmToggle(),
+            const Divider(),
+            const DarkModeToggle(),
+            const SizedBox(height: 20),
+            ListTile(
+              title: const Text('이용약관'),
+              onTap: () {
+                _navigateToTextScreen(context, '이용 약관');
+              },
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text('개인 정보 처리 방침'),
+              onTap: () {
+                _navigateToTextScreen(context, '개인 정보 처리 방침');
+              },
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text('버전 정보'),
+              onTap: () {
+                _navigateToTextScreen(context, '버전 정보');
+              },
+            ),
+            const SizedBox(height: 20),
+            const LogOutButton(),
+            const Divider(),
+            const WithdrawButton(),
           ],
         ),
       ),
@@ -42,51 +97,9 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class ProfileCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Replace with your actual profile data and image
-    String nickname = '김바보';
-    String profileImage = 'assets/profile_image.jpg';
-
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16),
-        leading: CircleAvatar(
-          backgroundImage: AssetImage(profileImage),
-          radius: 30,
-        ),
-        title: Text(
-          nickname,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        trailing: ElevatedButton(
-          onPressed: () {
-            // Navigate to the profile edit screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProfileEditScreen(
-                  onProfileChanged: (bool isChanged) {},
-                ),
-              ),
-            );
-          },
-          child: Text('프로필 수정'),
-        ),
-      ),
-    );
-  }
-}
-
 class PushAlarmToggle extends StatefulWidget {
+  const PushAlarmToggle({super.key});
+
   @override
   _PushAlarmToggleState createState() => _PushAlarmToggleState();
 }
@@ -97,7 +110,7 @@ class _PushAlarmToggleState extends State<PushAlarmToggle> {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      title: Text('푸시 알림'),
+      title: const Text('푸시 알림'),
       value: _isPushEnabled,
       onChanged: (value) {
         setState(() {
@@ -109,6 +122,8 @@ class _PushAlarmToggleState extends State<PushAlarmToggle> {
 }
 
 class DarkModeToggle extends StatefulWidget {
+  const DarkModeToggle({super.key});
+
   @override
   _DarkModeToggleState createState() => _DarkModeToggleState();
 }
@@ -119,7 +134,7 @@ class _DarkModeToggleState extends State<DarkModeToggle> {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      title: Text('다크 모드'),
+      title: const Text('다크 모드'),
       value: _isDarkModeEnabled,
       onChanged: (value) {
         setState(() {
@@ -131,96 +146,10 @@ class _DarkModeToggleState extends State<DarkModeToggle> {
   }
 }
 
-class SettingsItem extends StatelessWidget {
-  final String title;
-  final VoidCallback onTap;
-
-  SettingsItem({required this.title, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      onTap: onTap,
-    );
-  }
-}
-
-class LogOutButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 4),
-      // Adjust the left padding as needed
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: TextButton(
-          onPressed: () {
-            // Implement logout logic here
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            // Set background color to transparent
-            primary: Colors.black, // Text color
-          ),
-          child: Text(
-            '로그아웃',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.blue,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class WithdrawButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 4), // Adjust the left padding as needed
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: TextButton(
-          onPressed: () {
-            // Implement withdraw logic here
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            // Set background color to transparent
-            primary: Colors.black, // Text color
-          ),
-          child: Text(
-            '탈퇴하기',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.blue,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// class WithdrawButton extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return ElevatedButton(
-//       onPressed: () {
-//         // Implement withdraw logic here
-//       },
-//       child: Text("탈퇴하기"),
-//     );
-//   }
-// }
-
 class TextScreen extends StatelessWidget {
   final String title;
 
-  TextScreen({required this.title});
+  const TextScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
