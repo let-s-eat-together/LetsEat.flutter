@@ -27,7 +27,7 @@ class _BuildTextFieldState extends State<BuildTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 300.0,
       child: TextFormField(
         onSaved: widget.onSaved,
@@ -71,14 +71,14 @@ class _BuildTextFieldState extends State<BuildTextField> {
         onFieldSubmitted: (_) =>
             FocusScope.of(context).requestFocus(widget.nextFocusNode),
         decoration: InputDecoration(
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(25)),
             borderSide: BorderSide.none,
           ),
           prefixIcon: widget.icon,
           hintText: widget.hintText,
           filled: true,
-          fillColor: Color(0xffefefef),
+          fillColor: const Color(0xffefefef),
           suffixIcon: widget.textType == 1
               ? IconButton(
                   onPressed: () {
