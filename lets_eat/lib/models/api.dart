@@ -32,6 +32,9 @@ enum ApiType {
   sting, // sting
   profile, // modify profile
   getMessages, // get messages
+  messageSting, // message sting
+  messageFriendAccept, // message accept
+  messageFriendRequest, // message request
 }
 
 // api raw value
@@ -64,6 +67,12 @@ extension APIModelExtension on ApiType {
         return 'sting';
       case ApiType.profile:
         return 'profile';
+      case ApiType.messageSting:
+        return 'message/sting';
+      case ApiType.messageFriendAccept:
+        return 'message/friend/accept';
+      case ApiType.messageFriendRequest:
+        return 'message/friend/request';
     }
   }
 }
