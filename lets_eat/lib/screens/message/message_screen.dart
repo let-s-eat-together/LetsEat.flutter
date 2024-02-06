@@ -27,16 +27,25 @@ class _MessageScreenState extends State<MessageScreen> {
         messageType: '친구 요청 수락', creationTime: '2023-01-01', friendName: '6'),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+    getMessages(token!);
+  }
+
   Future<void> getMessages(String token) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl${ApiType.getMessages.rawValue}'),
+        Uri.parse('$baseUrl${ApiType.messageSting.rawValue}'),
         headers: API.getHeaderWithToken(token),
       );
       List<Message> messages = jsonDecode(response.body);
       setState(() {
         messageList = messages;
       });
+      debugPrint('Success to request: ${response.body}');
     } catch (e) {
       debugPrint('Failed to request: $e');
     }

@@ -38,6 +38,14 @@ class _PlanScreenState extends State<PlanScreen> {
     //     friendName: '4'),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+    getPlanList(token!);
+  }
+
   Future<void> getPlanList(String token) async {
     try {
       final response = await http.get(
@@ -51,7 +59,7 @@ class _PlanScreenState extends State<PlanScreen> {
       setState(() {
         this.planList = planList;
       });
-      debugPrint('Success to request: $response');
+      debugPrint('Success to request: ${response.body}');
     } catch (e) {
       debugPrint('Failed to request: $e');
     }
@@ -77,32 +85,34 @@ class _PlanScreenState extends State<PlanScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => getPlanList(token!),
-          child: planList.isEmpty
-              ? const Center(
+          child: ListView.separated(
+            itemCount: planList.length,
+            itemBuilder: (context, index) {
+              Plan plan = planList[index];
+              if (planList.isEmpty) {
+                return const Center(
                   child: Text(
                     '친구와의 약속이 없습니다.',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
-                )
-              : ListView.separated(
-                  itemCount: planList.length,
-                  itemBuilder: (context, index) {
-                    Plan plan = planList[index];
-                    return ListTile(
-                      leading: const CircleAvatar(
-                        child: Icon(Icons.person),
-                      ),
-                      title: Text(plan.friendName),
-                      subtitle:
-                          Text('${plan.creationDate} ~ ${plan.expirationDate}'),
-                      trailing: StingButton(
-                          otherUserName: plan.friendName, planId: plan.planId),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider();
-                  },
-                ),
+                );
+              } else {
+                return ListTile(
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.person),
+                  ),
+                  title: Text(plan.friendName),
+                  subtitle:
+                      Text('${plan.creationDate} ~ ${plan.expirationDate}'),
+                  trailing: StingButton(
+                      otherUserName: plan.friendName, planId: plan.planId),
+                );
+              }
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider();
+            },
+          ),
         ),
       ),
     );

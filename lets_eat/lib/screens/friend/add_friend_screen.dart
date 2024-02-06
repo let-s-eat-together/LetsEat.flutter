@@ -17,7 +17,7 @@ class AddFriendScreen extends StatefulWidget {
 
 class _AddFriendScreenState extends State<AddFriendScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-  List<Friend> friendList = [];
+  List<Friend> searchList = [];
 
   Future<void> searchFriends(String inputText, String token) async {
     try {
@@ -26,19 +26,16 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         headers: API.getHeaderWithToken(token),
       );
 
-      List<Friend> searchResults = parseFriends(response.body);
+      List<dynamic> data = jsonDecode(response.body);
+      List<Friend> searchResults = data.map((e) => Friend.fromJson(e)).toList();
 
       setState(() {
-        friendList = searchResults;
+        searchList = searchResults;
       });
+      debugPrint('Success to request: ${response.body}');
     } catch (e) {
       debugPrint('Failed to request: $e');
     }
-  }
-
-  List<Friend> parseFriends(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Friend>((json) => Friend.fromJson(json)).toList();
   }
 
   @override
@@ -71,7 +68,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                       controller: _textEditingController,
                       decoration: const InputDecoration(
                         hintText: 'friend@email.com',
-                        prefixIcon: Icon(Icons.search),
+                        // prefixIcon: Icon(Icons.search),
                       ),
                       validator: (value) =>
                           value!.isEmpty ? 'Enter an email' : null,
@@ -83,18 +80,18 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
-                      _textEditingController.clear();
+                      searchFriends(_textEditingController.text, token!);
                       // Trigger the friend search when the button is pressed
                       // searchFriends(_textEditingController.text);
                     },
-                    child: const Icon(Icons.clear),
+                    child: const Icon(Icons.search),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
             Column(
-              children: friendList.map((friend) {
+              children: searchList.map((friend) {
                 return ListTile(
                   title: Text(friend.name),
                   subtitle: Text(friend.email),
