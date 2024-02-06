@@ -9,7 +9,7 @@ Future<void> signupAPI(String? email, String? password, String? nickname,
   try {
     final response = await http.post(
       Uri.parse(baseUrl + ApiType.signup.rawValue),
-      // headers: headers,
+      headers: headers,
       body: jsonEncode(<String, String>{
         'email': email!,
         'password': password!,

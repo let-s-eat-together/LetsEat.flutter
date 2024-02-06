@@ -12,7 +12,7 @@ Future<void> loginAPI(
       Uri.parse(baseUrl + ApiType.login.rawValue),
       headers: headers,
       body: jsonEncode(<String, String>{
-        'id': email!,
+        'email': email!,
         'password': password!,
       }),
     );
@@ -20,19 +20,15 @@ Future<void> loginAPI(
     debugPrint('login: ${response.body}');
     UserDataManager.saveUser(
       User(
-        id: data['userNumber'],
-        username: data['username'],
+        id: data['user_id'],
+        username: data['name'],
         token: data['token'],
       ),
     );
+    debugPrint(response.reasonPhrase);
     debugPrint(response.body);
     Navigator.of(context).pushNamed(
       '/home',
-      arguments: {
-        'token': data['token'],
-        'userNumber': data['userNumber'],
-        'username': data['username'],
-      },
     );
   } catch (e) {
     print('로그인 실패');
