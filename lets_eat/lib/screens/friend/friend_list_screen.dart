@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:lets_eat/models/friend.dart';
-import 'package:lets_eat/screens/friend/add_button.dart';
+import 'package:lets_eat/screens/friend/add_friend_screen.dart';
 
 class FriendListScreen extends StatefulWidget {
+  const FriendListScreen({super.key});
+
   @override
   _FriendListScreenState createState() => _FriendListScreenState();
 }
 
 class _FriendListScreenState extends State<FriendListScreen> {
+  final TextEditingController _textEditingController = TextEditingController();
+
   String searchText = '';
   final List<String> friendList = [
     '김서근',
@@ -30,24 +32,63 @@ class _FriendListScreenState extends State<FriendListScreen> {
     '캐릭터'
   ];
 
-  List<Friend> parseFriends(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Friend>((json) => Friend.fromJson(json)).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 187, 157, 211),
+        title: const Text(
+          '친구',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const AddFriendScreen()),
+              );
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            SearchTextField(
+            const SizedBox(height: 16),
+            SearchBar(
+              hintText: '친구 검색',
+              leading: const Icon(Icons.search),
+              controller: _textEditingController,
               onChanged: (value) {
                 setState(() {
                   searchText = value;
                 });
               },
+              trailing: [
+                IconButton(
+                  onPressed: () {
+                    _textEditingController.clear();
+                    setState(() {
+                      searchText = '';
+                    });
+                  },
+                  icon: const Icon(Icons.clear),
+                ),
+              ],
+              elevation: MaterialStateProperty.all(10.0),
+              constraints: const BoxConstraints(
+                maxWidth: 400,
+                minHeight: 50,
+              ),
             ),
+            const SizedBox(height: 16),
             Expanded(
               child: ListView.separated(
                 itemCount: friendList
@@ -60,13 +101,10 @@ class _FriendListScreenState extends State<FriendListScreen> {
                           name.startsWith(searchText) || searchText == '')
                       .elementAt(index);
                   return ListTile(
-                    leading: CircleAvatar(
+                    leading: const CircleAvatar(
                       child: Icon(Icons.person),
                     ),
                     title: Text(name),
-                    trailing: AddButton(
-                      friendName: name,
-                    ),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
@@ -84,7 +122,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
 class SearchTextField extends StatelessWidget {
   final Function(String) onChanged;
 
-  SearchTextField({required this.onChanged});
+  const SearchTextField({super.key, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
