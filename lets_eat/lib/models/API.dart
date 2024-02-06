@@ -1,9 +1,21 @@
-const String baseUrl = 'http://34.64.105.81:8080/';
+class API {
+  static Map<String, String> getHeader() {
+    final Map<String, String> header = {
+      'Content-Type': 'application/json',
+    };
+    return header;
+  }
 
-final Map<String, String> headers = {
-  // 'Authorization': 'Bearer $token',
-  'Content-Type': 'application/json',
-};
+  static Map<String, String> getHeaderWithToken(String token) {
+    final Map<String, String> headerWithToken = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+    return headerWithToken;
+  }
+}
+
+const String baseUrl = 'http://34.64.105.81:8080/';
 
 // api type
 enum ApiType {
