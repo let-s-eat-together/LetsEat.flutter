@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/models/api.dart';
+import 'package:lets_eat/provider/user_provider.dart';
 import 'package:lets_eat/screens/friend/add_button.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/friend.dart';
 
@@ -17,11 +19,11 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   List<Friend> friendList = [];
 
-  Future<void> searchFriends(String inputText) async {
+  Future<void> searchFriends(String inputText, String token) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl${ApiType.search.rawValue}/$inputText'),
-        headers: headers,
+        headers: API.getHeaderWithToken(token),
       );
 
       List<Friend> searchResults = parseFriends(response.body);
@@ -41,6 +43,9 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final token = userProvider.user?.token;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('친구 추가하기'),

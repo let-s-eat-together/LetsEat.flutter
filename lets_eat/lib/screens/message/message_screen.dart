@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lets_eat/models/message.dart';
-import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/models/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:lets_eat/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({super.key});
@@ -25,11 +27,11 @@ class _MessageScreenState extends State<MessageScreen> {
         messageType: '친구 요청 수락', creationTime: '2023-01-01', friendName: '6'),
   ];
 
-  Future<void> getMessages() async {
+  Future<void> getMessages(String token) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl${ApiType.getMessages.rawValue}'),
-        headers: headers,
+        headers: API.getHeaderWithToken(token),
       );
       List<Message> messages = jsonDecode(response.body);
       setState(() {
@@ -42,6 +44,9 @@ class _MessageScreenState extends State<MessageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final token = userProvider.user?.token;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -56,7 +61,7 @@ class _MessageScreenState extends State<MessageScreen> {
         ),
       ),
       body: RefreshIndicator(
-        onRefresh: getMessages,
+        onRefresh: () => getMessages(token!),
         child: ListView.separated(
           itemCount: messageList.length,
           itemBuilder: (context, index) {

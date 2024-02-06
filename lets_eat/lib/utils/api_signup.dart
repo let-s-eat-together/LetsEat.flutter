@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/models/api.dart';
 
 Future<void> signupAPI(String? email, String? password, String? nickname,
     BuildContext context) async {
   try {
     final response = await http.post(
       Uri.parse(baseUrl + ApiType.signup.rawValue),
-      headers: headers,
+      headers: API.getHeader(),
       body: jsonEncode(<String, String>{
         'email': email!,
         'password': password!,

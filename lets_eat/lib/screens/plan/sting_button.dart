@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/models/api.dart';
+import 'package:lets_eat/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class StingButton extends StatefulWidget {
   final String otherUserName;
@@ -14,16 +16,16 @@ class StingButton extends StatefulWidget {
 }
 
 class _StingButtonState extends State<StingButton> {
-  Future<void> sting() async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl${ApiType.sting.rawValue}/${widget.planId}'),
-        headers: headers,
-      );
-      debugPrint(response.body);
-    } catch (e) {
-      debugPrint('Failed to request: $e');
-    }
+  Future<void> sting(String token) async {
+    // try {
+    final response = await http.post(
+      Uri.parse('$baseUrl${ApiType.sting.rawValue}/${widget.planId}'),
+      headers: API.getHeaderWithToken(token),
+    );
+    debugPrint(response.body);
+    // } catch (e) {
+    //   debugPrint('Failed to request: $e');
+    // }
   }
 
   void sendMessage(String to) {
@@ -38,6 +40,8 @@ class _StingButtonState extends State<StingButton> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final token = userProvider.user?.token;
     return IconButton(
       iconSize: 25,
       icon: const Icon(Icons.touch_app),
@@ -53,7 +57,7 @@ class _StingButtonState extends State<StingButton> {
                 TextButton(
                   child: const Text('Yes'),
                   onPressed: () {
-                    sting();
+                    sting(token!);
                     sendMessage(widget.otherUserName);
                     Navigator.of(context).pop();
                   },
