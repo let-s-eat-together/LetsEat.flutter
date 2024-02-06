@@ -1,22 +1,19 @@
-// Message.dart
 class Message {
-  int planId;
-  String creationDate;
-  String friendrName;
-  int count;
+  String messageType;
+  String creationTime;
+  String friendName;
 
-  Message(
-      {required this.planId,
-      required this.creationDate,
-      required this.friendrName,
-      required this.count});
+  Message({
+    required this.messageType, // Add initializer for 'messageType' field
+    required this.creationTime,
+    required this.friendName,
+  });
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      planId: json['planId'],
-      creationDate: json['creationDate'],
-      friendrName: json['friendrName'],
-      count: json['count'],
+      messageType: json['messageType'],
+      creationTime: json['creationTime'],
+      friendName: json['friendName'],
     );
   }
 }
