@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lets_eat/models/user.dart';
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key});
+  final User user;
+  const ProfileCard({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Replace with your actual profile data and image
-
-    User? user = UserDataManager.getUser() as User?;
     String profileImage = 'assets/img/profile_image.png';
 
     return Card(
@@ -23,7 +21,7 @@ class ProfileCard extends StatelessWidget {
           radius: 30,
         ),
         title: Text(
-          user?.username ?? '사용자 이름',
+          user.username,
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

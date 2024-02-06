@@ -1,19 +1,57 @@
+
 import 'package:flutter/material.dart';
+import 'package:lets_eat/models/user.dart';
 import 'package:lets_eat/widgets/logout_button.dart';
 import 'package:lets_eat/widgets/profile_card.dart';
 import 'package:lets_eat/widgets/withdraw_button.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  _getUser() async {
+    user = await UserDataManager.getUser();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 187, 157, 211),
+        title: const Text(
+          '설정',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            const ProfileCard(),
+            user == null
+                ? ProfileCard(
+                    user: User(
+                    username: 'Default',
+                    id: 1,
+                    token: 'token',
+                  ))
+                : ProfileCard(user: user!),
             const SizedBox(height: 20),
             const PushAlarmToggle(),
             const Divider(),
