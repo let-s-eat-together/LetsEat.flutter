@@ -83,37 +83,45 @@ class _PlanScreenState extends State<PlanScreen> {
         ),
       ),
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () => getPlanList(token!),
-          child: ListView.separated(
-            itemCount: planList.length,
-            itemBuilder: (context, index) {
-              Plan plan = planList[index];
-              if (planList.isEmpty) {
-                return const Center(
-                  child: Text(
-                    '친구와의 약속이 없습니다.',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-                  ),
-                );
-              } else {
-                return ListTile(
-                  leading: const CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
-                  title: Text(plan.friendName),
-                  subtitle:
-                      Text('${plan.creationDate} ~ ${plan.expirationDate}'),
-                  trailing: StingButton(
-                      otherUserName: plan.friendName, planId: plan.planId),
-                );
-              }
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider();
-            },
-          ),
-        ),
+        child: planList.isEmpty
+            ? const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '현재 친구와의 약속이 없습니다.',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                    ),
+                    // Optionally add a button to encourage making plans
+                    SizedBox(height: 16),
+                    Text(
+                      '새로운 약속을 만들고 함께 즐거운 시간을 보내보세요!',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    // Consider adding an icon or image for visual appeal
+                  ],
+                ),
+              )
+            : RefreshIndicator(
+                onRefresh: () => getPlanList(token!),
+                child: ListView.builder(
+                  itemCount: planList.length,
+                  itemBuilder: (context, index) {
+                    Plan plan = planList[index];
+                    return ListTile(
+                      leading: const CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
+                      title: Text(plan.friendName),
+                      subtitle:
+                          Text('${plan.creationDate} ~ ${plan.expirationDate}'),
+                      trailing: StingButton(
+                          otherUserName: plan.friendName, planId: plan.planId),
+                    );
+                  },
+                ),
+              ),
       ),
     );
   }

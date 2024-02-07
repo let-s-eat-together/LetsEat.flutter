@@ -77,74 +77,78 @@ class _FriendListScreenState extends State<FriendListScreen> {
         ],
       ),
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () => getFriendList(token!),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 16),
-              SearchBar(
-                hintText: '친구 검색',
-                leading: const Icon(Icons.search),
-                controller: _textEditingController,
-                onChanged: (value) {
-                  setState(() {
-                    searchText = value;
-                  });
-                },
-                trailing: [
-                  IconButton(
-                    onPressed: () {
-                      _textEditingController.clear();
-                      setState(() {
-                        searchText = '';
-                      });
-                    },
-                    icon: const Icon(Icons.clear),
-                  ),
-                ],
-                elevation: MaterialStateProperty.all(10.0),
-                constraints: const BoxConstraints(
-                  maxWidth: 400,
-                  minHeight: 50,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: friendList.length,
-                  itemBuilder: (context, index) {
-                    Friend friend = friendList[index];
-                    return ListTile(
-                      leading: const CircleAvatar(
-                        child: Icon(Icons.person),
+        child: friendList.isEmpty
+            ? const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '아직 등록된 친구가 없어요.',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
                       ),
-                      title: Text(friend.name),
-                    );
-                  },
-                  // itemCount: friendList
-                  //     .where((friend) =>
-                  //         friend.startsWith(searchText) || searchText == '')
-                  //     .length,
-                  // itemBuilder: (context, index) {
-                  //   String name = friendList
-                  //       .where((name) =>
-                  //           name.startsWith(searchText) || searchText == '')
-                  //       .elementAt(index);
-                  //   return ListTile(
-                  //     leading: const CircleAvatar(
-                  //       child: Icon(Icons.person),
-                  //     ),
-                  //     title: Text(name),
-                  //   );
-                  // },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider();
-                  },
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      '친구를 추가하고 함께 즐거운 시간을 보내보세요!',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              )
+            : RefreshIndicator(
+                onRefresh: () => getFriendList(token!),
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(height: 16),
+                    SearchBar(
+                      hintText: '친구 검색',
+                      leading: const Icon(Icons.search),
+                      controller: _textEditingController,
+                      onChanged: (value) {
+                        setState(() {
+                          searchText = value;
+                        });
+                      },
+                      trailing: [
+                        IconButton(
+                          onPressed: () {
+                            _textEditingController.clear();
+                            setState(() {
+                              searchText = '';
+                            });
+                          },
+                          icon: const Icon(Icons.clear),
+                        ),
+                      ],
+                      elevation: MaterialStateProperty.all(10.0),
+                      constraints: const BoxConstraints(
+                        maxWidth: 400,
+                        minHeight: 50,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: friendList.length,
+                        itemBuilder: (context, index) {
+                          Friend friend = friendList[index];
+                          return ListTile(
+                            leading: const CircleAvatar(
+                              child: Icon(Icons.person),
+                            ),
+                            title: Text(friend.name),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

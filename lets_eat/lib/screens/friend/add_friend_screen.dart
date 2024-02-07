@@ -90,15 +90,23 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Column(
-              children: searchList.map((friend) {
-                return ListTile(
-                  title: Text(friend.name),
-                  subtitle: Text(friend.email),
-                  trailing: AddButton(friendName: friend.name),
-                );
-              }).toList(),
-            ),
+            searchList.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      '검색 결과가 없습니다.',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
+                : Column(
+                    children: searchList.map((friend) {
+                      return ListTile(
+                        title: Text(friend.name),
+                        subtitle: Text(friend.email),
+                        trailing: AddButton(friendName: friend.name),
+                      );
+                    }).toList(),
+                  ),
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
