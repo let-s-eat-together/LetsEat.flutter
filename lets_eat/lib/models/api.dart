@@ -21,6 +21,7 @@ const String baseUrl = 'http://34.64.105.81:8080/';
 enum ApiType {
   signup, // signup
   login, // login
+  withdraw, // withdraw
   createPlan, // create plan
   getPlan, // get plan
   complete, // plan complete
@@ -45,6 +46,8 @@ extension APIModelExtension on ApiType {
         return 'sign-up';
       case ApiType.login:
         return 'login';
+      case ApiType.withdraw:
+        return 'delete';
       case ApiType.createPlan:
         return 'plan/create';
       case ApiType.getPlan:
