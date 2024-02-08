@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lets_eat/models/user.dart';
+import 'package:lets_eat/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProfileCard extends StatelessWidget {
-  final User user;
-  const ProfileCard({Key? key, required this.user}) : super(key: key);
+  const ProfileCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    String profileImage = 'assets/img/profile_image.png';
-
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final user = userProvider.user;
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -16,12 +16,12 @@ class ProfileCard extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
-        leading: CircleAvatar(
-          backgroundImage: AssetImage(profileImage),
+        leading: const CircleAvatar(
+          backgroundImage: AssetImage('assets/img/profile_image.png'),
           radius: 30,
         ),
         title: Text(
-          user.username,
+          '${user?.username}',
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

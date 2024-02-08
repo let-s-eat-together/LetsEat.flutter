@@ -3,15 +3,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/models/api.dart';
 import 'package:lets_eat/models/user.dart';
+import 'package:lets_eat/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 Future<void> loginAPI(
     String? email, String? password, BuildContext context) async {
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+
   try {
     final response = await http.post(
       Uri.parse(baseUrl + ApiType.login.rawValue),
-      headers: headers,
+      headers: API.getHeader(),
       body: jsonEncode(<String, String>{
         'email': email!,
         'password': password!,
@@ -20,15 +24,16 @@ Future<void> loginAPI(
     if (response.statusCode >= 200 && response.statusCode < 300){
       var data = jsonDecode(response.body);
       debugPrint('login: ${response.body}');
-      UserDataManager.saveUser(
+      await userProvider.saveUser(
         User(
           id: data['user_id'],
           username: data['name'],
           token: data['token'],
         ),
       );
-      debugPrint(response.reasonPhrase);
-      debugPrint(response.body);
+      debugPrint(
+        'data: ${userProvider.user!.username} | ${userProvider.user!.token} | ${userProvider.user!.id}');
+
       Navigator.of(context).pushNamed(
         '/home',
       );

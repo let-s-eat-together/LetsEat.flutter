@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:lets_eat/models/user.dart';
 import 'package:lets_eat/widgets/logout_button.dart';
 import 'package:lets_eat/widgets/profile_card.dart';
 import 'package:lets_eat/widgets/withdraw_button.dart';
@@ -13,18 +11,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  User? user;
-
-  @override
-  void initState() {
-    super.initState();
-    _getUser();
-  }
-
-  _getUser() async {
-    user = await UserDataManager.getUser();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,14 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            user == null
-                ? ProfileCard(
-                    user: User(
-                    username: 'Default',
-                    id: 1,
-                    token: 'token',
-                  ))
-                : ProfileCard(user: user!),
+            const ProfileCard(),
             const SizedBox(height: 20),
             const PushAlarmToggle(),
             const Divider(),

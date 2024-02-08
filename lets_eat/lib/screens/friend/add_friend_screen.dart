@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/models/api.dart';
+import 'package:lets_eat/provider/user_provider.dart';
 import 'package:lets_eat/screens/friend/add_button.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/friend.dart';
 
@@ -15,32 +17,32 @@ class AddFriendScreen extends StatefulWidget {
 
 class _AddFriendScreenState extends State<AddFriendScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-  List<Friend> friendList = [];
+  List<Friend> searchList = [];
 
-  Future<void> searchFriends(String inputText) async {
+  Future<void> searchFriends(String inputText, String token) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl${ApiType.search.rawValue}/$inputText'),
-        headers: headers,
+        headers: API.getHeaderWithToken(token),
       );
 
-      List<Friend> searchResults = parseFriends(response.body);
+      List<dynamic> data = jsonDecode(response.body);
+      List<Friend> searchResults = data.map((e) => Friend.fromJson(e)).toList();
 
       setState(() {
-        friendList = searchResults;
+        searchList = searchResults;
       });
+      debugPrint('Success to request: ${response.body}');
     } catch (e) {
       debugPrint('Failed to request: $e');
     }
   }
 
-  List<Friend> parseFriends(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Friend>((json) => Friend.fromJson(json)).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final token = userProvider.user?.token;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('친구 추가하기'),
@@ -66,7 +68,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                       controller: _textEditingController,
                       decoration: const InputDecoration(
                         hintText: 'friend@email.com',
-                        prefixIcon: Icon(Icons.search),
+                        // prefixIcon: Icon(Icons.search),
                       ),
                       validator: (value) =>
                           value!.isEmpty ? 'Enter an email' : null,
@@ -78,25 +80,33 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
-                      _textEditingController.clear();
+                      searchFriends(_textEditingController.text, token!);
                       // Trigger the friend search when the button is pressed
                       // searchFriends(_textEditingController.text);
                     },
-                    child: const Icon(Icons.clear),
+                    child: const Icon(Icons.search),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-            Column(
-              children: friendList.map((friend) {
-                return ListTile(
-                  title: Text(friend.name),
-                  subtitle: Text(friend.email),
-                  trailing: AddButton(friendName: friend.name),
-                );
-              }).toList(),
-            ),
+            searchList.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      '검색 결과가 없습니다.',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
+                : Column(
+                    children: searchList.map((friend) {
+                      return ListTile(
+                        title: Text(friend.name),
+                        subtitle: Text(friend.email),
+                        trailing: AddButton(friendName: friend.name),
+                      );
+                    }).toList(),
+                  ),
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
