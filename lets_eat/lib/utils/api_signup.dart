@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lets_eat/models/API.dart';
+import 'package:lets_eat/utils/api_login.dart';
 
 Future<void> signupAPI(String? email, String? password, String? nickname,
     BuildContext context) async {
@@ -19,6 +20,7 @@ Future<void> signupAPI(String? email, String? password, String? nickname,
     debugPrint('signup: ${response.body}');
     debugPrint('회원가입 성공');
     Navigator.pop(context);
+    loginAPI(email, password, context);
   } catch (e) {
     print('회원가입 실패');
     // 값이 틀려서 실패 or 다른 요인으로 실패 구분하기
